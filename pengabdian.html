@@ -129,6 +129,22 @@
     .act-modal-close:hover { color:var(--dark); }
     .act-modal-body { padding:20px 28px 28px; }
     .act-modal-img { width:100%; border-radius:10px; margin-bottom:16px; object-fit:cover; max-height:260px; }
+    /* ── Galeri slideshow ── */
+    .modal-gallery { position:relative; margin-bottom:16px; display:none; }
+    .modal-gallery img { width:100%; border-radius:10px; object-fit:cover; max-height:260px; display:block; }
+    .gallery-nav {
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,0.45); color:white; border:none;
+      width:36px; height:36px; border-radius:50%; font-size:1.1rem;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background 0.2s;
+    }
+    .gallery-nav:hover { background:rgba(0,0,0,0.7); }
+    .gallery-prev { left:8px; }
+    .gallery-next { right:8px; }
+    .gallery-dots { text-align:center; margin-top:8px; display:flex; gap:6px; justify-content:center; }
+    .gallery-dot { width:8px; height:8px; border-radius:50%; background:#ccc; border:none; cursor:pointer; padding:0; transition:background 0.2s; }
+    .gallery-dot.active { background:var(--blue); }
     .act-modal-video { position:relative; padding-top:56.25%; border-radius:10px; overflow:hidden; margin-bottom:16px; background:#000; }
     .act-modal-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
     .act-modal-desc { font-size:0.9rem; color:var(--gray); line-height:1.8; margin-bottom:14px; }
@@ -598,7 +614,12 @@
       <button class="act-modal-close" onclick="closeActModal()">✕</button>
     </div>
     <div class="act-modal-body">
-      <img id="modal-img" class="act-modal-img" src="" alt="" style="display:none;">
+      <div class="modal-gallery" id="modal-gallery">
+        <img id="modal-img" src="" alt="">
+        <button class="gallery-nav gallery-prev" onclick="galleryNav(-1)">&#8249;</button>
+        <button class="gallery-nav gallery-next" onclick="galleryNav(1)">&#8250;</button>
+        <div class="gallery-dots" id="gallery-dots"></div>
+      </div>
       <div id="modal-video" class="act-modal-video" style="display:none;">
         <iframe id="modal-iframe" src="" allowfullscreen></iframe>
       </div>
@@ -639,9 +660,21 @@ function openActModal(btn) {
   extraEl.textContent = extraTxt;
   extraEl.style.display = extraTxt ? 'block' : 'none';
 
+  const fotoList = foto ? foto.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const gallery = document.getElementById('modal-gallery');
   const imgEl = document.getElementById('modal-img');
-  if (foto) { imgEl.src = foto.split(',')[0].trim(); imgEl.alt = judulId; imgEl.style.display = 'block'; }
-  else imgEl.style.display = 'none';
+  const dotsEl = document.getElementById('gallery-dots');
+  if (fotoList.length) {
+    window._galleryFotos = fotoList;
+    window._galleryIdx = 0;
+    imgEl.src = fotoList[0]; imgEl.alt = judulId;
+    dotsEl.innerHTML = fotoList.map((_,i) => `<button class="gallery-dot${i===0?' active':''}" onclick="galleryGoto(${i})"></button>`).join('');
+    gallery.style.display = 'block';
+    gallery.querySelector('.gallery-prev').style.display = fotoList.length > 1 ? 'flex' : 'none';
+    gallery.querySelector('.gallery-next').style.display = fotoList.length > 1 ? 'flex' : 'none';
+  } else {
+    gallery.style.display = 'none';
+  }
 
   const videoWrap = document.getElementById('modal-video');
   if (video) {
@@ -668,6 +701,15 @@ function openActModal(btn) {
   document.getElementById('act-modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
+function galleryGoto(idx) {
+  const fotos = window._galleryFotos || [];
+  if (!fotos.length) return;
+  window._galleryIdx = (idx + fotos.length) % fotos.length;
+  document.getElementById('modal-img').src = fotos[window._galleryIdx];
+  document.querySelectorAll('.gallery-dot').forEach((d,i) => d.classList.toggle('active', i === window._galleryIdx));
+}
+function galleryNav(dir) { galleryGoto((window._galleryIdx || 0) + dir); }
 
 function closeActModal(e) {
   if (e && e.target !== document.getElementById('act-modal-overlay') && e.type !== 'click') return;
