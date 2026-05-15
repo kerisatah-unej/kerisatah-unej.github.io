@@ -95,6 +95,45 @@
     @media(max-width:768px) {
       .act-grid-2 { grid-template-columns:1fr !important; }
     }
+
+    /* ── Detail Button ── */
+    .btn-detail {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:12px; padding:7px 16px;
+      background:var(--blue); color:white; border:none;
+      border-radius:20px; font-size:0.8rem; font-weight:700;
+      cursor:pointer; transition:background 0.2s;
+    }
+    .btn-detail:hover { background:var(--blue-dark,#0d47a1); }
+
+    /* ── Modal ── */
+    .act-modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.6); z-index:9000;
+      align-items:center; justify-content:center; padding:16px;
+    }
+    .act-modal-overlay.open { display:flex; }
+    .act-modal {
+      background:white; border-radius:16px; max-width:700px; width:100%;
+      max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(0,0,0,0.3);
+    }
+    .act-modal-header {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      padding:24px 28px 16px; border-bottom:1px solid #eee;
+    }
+    .act-modal-header h3 { font-size:1.1rem; font-weight:800; color:var(--dark); line-height:1.4; flex:1; margin-right:12px; }
+    .act-modal-close {
+      background:none; border:none; font-size:1.5rem; cursor:pointer;
+      color:#aaa; line-height:1; flex-shrink:0;
+    }
+    .act-modal-close:hover { color:var(--dark); }
+    .act-modal-body { padding:20px 28px 28px; }
+    .act-modal-img { width:100%; border-radius:10px; margin-bottom:16px; object-fit:cover; max-height:260px; }
+    .act-modal-video { position:relative; padding-top:56.25%; border-radius:10px; overflow:hidden; margin-bottom:16px; background:#000; }
+    .act-modal-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .act-modal-desc { font-size:0.9rem; color:var(--gray); line-height:1.8; margin-bottom:14px; }
+    .act-modal-meta { font-size:0.82rem; color:var(--gray); display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; padding-top:12px; border-top:1px solid #eee; }
+    .act-modal-meta span { display:flex; align-items:center; gap:5px; }
   </style>
 </head>
 <body>
@@ -266,6 +305,7 @@
             <span><i class="fas fa-hospital" style="color:var(--blue);"></i> <span class="lang-id">Rumah Sakit Jember</span><span class="lang-en">Jember Hospitals</span></span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2020</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
@@ -296,6 +336,7 @@
             <span><i class="fas fa-map-marker-alt" style="color:var(--blue);"></i> Jember</span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2023</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
@@ -326,11 +367,20 @@
             <span><i class="fas fa-university" style="color:var(--red);"></i> UNEJ</span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> <span class="lang-id">Rutin</span><span class="lang-en">Ongoing</span></span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
-
-      <div class="act-small-card">
+      <div class="act-small-card"
+        data-judul-id="Pengenalan Robot Transporter di Yayasan Yatim Mandiri"
+        data-judul-en="Transporter Robot Introduction at Yayasan Yatim Mandiri"
+        data-desc-id="Dosen Fakultas Teknik Universitas Jember memperkenalkan teknologi robot transporter kepada anak-anak yatim di Yayasan Yatim Mandiri, Sumbersari, Jember. Kegiatan ini bertujuan menumbuhkan minat dan pengetahuan dasar teknologi robotika sejak dini, sekaligus memberikan motivasi bagi anak-anak yatim piatu untuk berkarya di bidang teknologi."
+        data-desc-en="Lecturers from Universitas Jember introduced transporter robot technology to orphaned children at Yayasan Yatim Mandiri, Sumbersari, Jember. The activity aimed to foster early interest in robotics and motivate orphaned children to pursue careers in technology."
+        data-extra-id="Tim: Ir. Wahyu Muldayani, S.T., M.T. · Ali Rizal Chaidir, S.T., M.T. · Ir. Sumardi, S.T., M.T. · Gramandha Wega Intyanto, S.ST., M.T. · Ir. Arizal Mujibtamala N.I., S.T., M.T."
+        data-extra-en="Team: Ir. Wahyu Muldayani, S.T., M.T. · Ali Rizal Chaidir, S.T., M.T. · Ir. Sumardi, S.T., M.T. · Gramandha Wega Intyanto, S.ST., M.T. · Ir. Arizal Mujibtamala N.I., S.T., M.T."
+        data-lokasi="Yayasan Yatim Mandiri, Sumbersari — Kab. Jember"
+        data-tahun="April 2023"
+        data-video="">
         <div class="act-img-wrap">🤖</div>
         <div class="act-card-body">
           <span class="act-category cat-tech" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
@@ -348,10 +398,20 @@
             <span><i class="fas fa-map-marker-alt" style="color:var(--green);"></i> Yayasan Yatim Mandiri, Sumbersari — Kab. Jember</span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> April 2023</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
-      <div class="act-small-card">
+      <div class="act-small-card"
+        data-judul-id="Modul Rangkaian Listrik Dasar untuk Siswa SDN Jomerto 02"
+        data-judul-en="Basic Electrical Circuit Module for SDN Jomerto 02 Students"
+        data-desc-id="Tim dosen Fakultas Teknik Universitas Jember memberikan modul praktikum rangkaian listrik dasar kepada siswa kelas VI SDN Jomerto 02, Kecamatan Patrang, Kabupaten Jember. Siswa dilatih memahami karakteristik rangkaian listrik dasar dan dikenalkan sejak dini dengan komponen-komponen elektronika yang digunakan dalam merangkai suatu rangkaian listrik."
+        data-desc-en="A team of lecturers from Universitas Jember provided a basic electrical circuit practicum module to Grade VI students of SDN Jomerto 02, Patrang, Jember. Students were trained to understand basic electrical circuit characteristics and introduced early to electronic components used in assembling electrical circuits."
+        data-extra-id="Tim: Wahyu Muldayani, S.T., M.T. · Arizal Mujibtamala Nanda Imron, S.T., M.T. · Dedy Wahyu Herdiyanto, S.T., M.T."
+        data-extra-en="Team: Wahyu Muldayani, S.T., M.T. · Arizal Mujibtamala Nanda Imron, S.T., M.T. · Dedy Wahyu Herdiyanto, S.T., M.T."
+        data-lokasi="SDN Jomerto 02, Desa Jomerto, Kec. Patrang — Kab. Jember"
+        data-tahun="Desember 2017"
+        data-video="">
         <div class="act-img-wrap">⚡</div>
         <div class="act-card-body">
           <span class="act-category cat-tech" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
@@ -369,10 +429,20 @@
             <span><i class="fas fa-map-marker-alt" style="color:var(--green);"></i> SDN Jomerto 02, Patrang — Kab. Jember</span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> Desember 2017</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
-      <div class="act-small-card">
+      <div class="act-small-card"
+        data-judul-id="Alat Bantu Pembelajaran Listrik Seri-Paralel di SDN Sidomulyo 05"
+        data-judul-en="Series-Parallel Circuit Learning Aid at SDN Sidomulyo 05"
+        data-desc-id="Dosen Fakultas Teknik Universitas Jember menyediakan alat bantu pembelajaran rangkaian listrik seri-paralel bagi siswa SDN Sidomulyo 05, Kecamatan Silo, Kabupaten Jember. Melalui kegiatan ini, siswa dapat melakukan praktikum langsung tentang rangkaian listrik seri-paralel serta dikenalkan sejak dini dengan komponen-komponen elektronika yang digunakan dalam merangkai suatu rangkaian listrik."
+        data-desc-en="Lecturers from Universitas Jember provided series-parallel electrical circuit learning aids to students of SDN Sidomulyo 05, Silo, Jember. Through this activity, students could directly practice series-parallel electrical circuits and were introduced early to electronic components used in circuit assembly."
+        data-extra-id="Tim: Wahyu Muldayani, S.T., M.T. · Paksitya Purnama Putra, S.T., M.T. · Audiananti Meganandi Kartini, S.Si., M.T."
+        data-extra-en="Team: Wahyu Muldayani, S.T., M.T. · Paksitya Purnama Putra, S.T., M.T. · Audiananti Meganandi Kartini, S.Si., M.T."
+        data-lokasi="SDN Sidomulyo 05, Desa Sidomulyo, Kec. Silo — Kab. Jember"
+        data-tahun="Januari 2017"
+        data-video="">
         <div class="act-img-wrap">💡</div>
         <div class="act-card-body">
           <span class="act-category cat-tech" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
@@ -390,6 +460,7 @@
             <span><i class="fas fa-map-marker-alt" style="color:var(--green);"></i> SDN Sidomulyo 05, Silo — Kab. Jember</span>
             <span><i class="fas fa-calendar" style="color:var(--gray);"></i> Januari 2017</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)"><i class="fas fa-info-circle"></i> <span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span></button>
         </div>
       </div>
 
@@ -543,6 +614,95 @@
 </footer>
 
 <button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- ══ DETAIL MODAL ══ -->
+<div class="act-modal-overlay" id="act-modal-overlay" onclick="closeActModal(event)">
+  <div class="act-modal" id="act-modal">
+    <div class="act-modal-header">
+      <h3 id="modal-title">—</h3>
+      <button class="act-modal-close" onclick="closeActModal()">✕</button>
+    </div>
+    <div class="act-modal-body">
+      <img id="modal-img" class="act-modal-img" src="" alt="" style="display:none;">
+      <div id="modal-video" class="act-modal-video" style="display:none;">
+        <iframe id="modal-iframe" src="" allowfullscreen></iframe>
+      </div>
+      <p class="act-modal-desc" id="modal-desc"></p>
+      <p class="act-modal-desc" id="modal-extra" style="display:none;"></p>
+      <div class="act-modal-meta">
+        <span id="modal-lokasi" style="display:none;"><i class="fas fa-map-marker-alt" style="color:var(--green);"></i> <span id="modal-lokasi-val"></span></span>
+        <span id="modal-tahun-wrap" style="display:none;"><i class="fas fa-calendar"></i> <span id="modal-tahun-val"></span></span>
+        <span id="modal-tim-wrap" style="display:none;"><i class="fas fa-users"></i> <span id="modal-tim-val"></span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="js/main.js"></script>
+<script>
+function openActModal(btn) {
+  const card = btn.closest('.act-small-card');
+  const isEn = document.body.classList.contains('en');
+
+  const judulId = card.dataset.judulId || card.querySelector('h3 .lang-id')?.textContent?.trim() || card.querySelector('h3')?.textContent?.trim() || '';
+  const judulEn = card.dataset.judulEn || card.querySelector('h3 .lang-en')?.textContent?.trim() || judulId;
+  const descId  = card.dataset.descId  || card.querySelector('p .lang-id')?.textContent?.trim()  || card.querySelector('p')?.textContent?.trim() || '';
+  const descEn  = card.dataset.descEn  || card.querySelector('p .lang-en')?.textContent?.trim()  || descId;
+  const extraId = card.dataset.extraId || '';
+  const extraEn = card.dataset.extraEn || '';
+  const foto    = card.dataset.foto    || '';
+  const video   = card.dataset.video   || '';
+  const lokasi  = card.dataset.lokasi  || '';
+  const tahun   = card.dataset.tahun   || '';
+  const tim     = card.dataset.tim     || '';
+
+  document.getElementById('modal-title').textContent = isEn ? judulEn : judulId;
+  document.getElementById('modal-desc').textContent  = isEn ? descEn  : descId;
+
+  const extraEl = document.getElementById('modal-extra');
+  const extraTxt = isEn ? extraEn : extraId;
+  extraEl.textContent = extraTxt;
+  extraEl.style.display = extraTxt ? 'block' : 'none';
+
+  const imgEl = document.getElementById('modal-img');
+  if (foto) { imgEl.src = 'assets/images/' + foto; imgEl.alt = judulId; imgEl.style.display = 'block'; }
+  else imgEl.style.display = 'none';
+
+  const videoWrap = document.getElementById('modal-video');
+  if (video) {
+    const id = video.includes('youtube.com') ? new URL(video).searchParams.get('v') : video.replace(/.*youtu\.be\//, '').replace(/.*embed\//, '');
+    document.getElementById('modal-iframe').src = 'https://www.youtube.com/embed/' + id;
+    videoWrap.style.display = 'block';
+  } else {
+    document.getElementById('modal-iframe').src = '';
+    videoWrap.style.display = 'none';
+  }
+
+  const lokasiEl = document.getElementById('modal-lokasi');
+  document.getElementById('modal-lokasi-val').textContent = lokasi;
+  lokasiEl.style.display = lokasi ? 'flex' : 'none';
+
+  const tahunEl = document.getElementById('modal-tahun-wrap');
+  document.getElementById('modal-tahun-val').textContent = tahun;
+  tahunEl.style.display = tahun ? 'flex' : 'none';
+
+  const timEl = document.getElementById('modal-tim-wrap');
+  document.getElementById('modal-tim-val').textContent = tim;
+  timEl.style.display = tim ? 'flex' : 'none';
+
+  document.getElementById('act-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeActModal(e) {
+  if (e && e.target !== document.getElementById('act-modal-overlay') && e.type !== 'click') return;
+  if (e && e.currentTarget === document.getElementById('act-modal-overlay') && e.target !== e.currentTarget) return;
+  document.getElementById('modal-iframe').src = '';
+  document.getElementById('act-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeActModal({}); });
+</script>
 </body>
 </html>
