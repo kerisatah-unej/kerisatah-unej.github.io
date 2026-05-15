@@ -53,7 +53,15 @@
     .item-row .item-num { width:24px;height:24px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#555;flex-shrink:0; }
     .btn-del { background:#FFEBEE;color:#c62828;border:none;border-radius:6px;padding:5px 12px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:background 0.2s;flex-shrink:0; }
     .btn-del:hover { background:#FFCDD2; }
+    .btn-edit { background:#E3F2FD;color:#1565C0;border:none;border-radius:6px;padding:5px 12px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:background 0.2s;flex-shrink:0; }
+    .btn-edit:hover { background:#BBDEFB; }
     .empty-note { color:#aaa;font-size:0.88rem;padding:16px;text-align:center;border:1px dashed #ddd;border-radius:8px; }
+    .edit-inline { margin-top:8px;padding:12px;background:#F8F9FA;border:1.5px solid #1565C0;border-radius:8px;display:none; }
+    .edit-inline textarea { width:100%;min-height:120px;font-family:monospace;font-size:0.82rem;padding:8px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;resize:vertical; }
+    .edit-inline-btns { display:flex;gap:8px;margin-top:8px; }
+    .btn-update { background:#1565C0;color:white;border:none;border-radius:6px;padding:6px 16px;font-size:0.82rem;font-weight:700;cursor:pointer; }
+    .btn-update:hover { background:#0d47a1; }
+    .btn-cancel-edit { background:#e0e0e0;color:#333;border:none;border-radius:6px;padding:6px 14px;font-size:0.82rem;font-weight:700;cursor:pointer; }
 
     /* ── Add Form ── */
     .add-section { border-top:1px solid #e0e0e0;padding-top:20px;margin-top:8px; }
@@ -505,14 +513,66 @@ function renderItems(container, items, tabName) {
     return;
   }
   container.innerHTML = items.map((item, i) => `
-    <div class="item-row">
-      <span class="item-num">${i+1}</span>
-      <span class="item-title">${escHtml(item.title)}</span>
-      <button class="btn-del" onclick="deleteItem('${tabName}',${i})">
-        <i class="fas fa-trash"></i> Hapus
-      </button>
+    <div class="item-row-wrap" id="wrap-${tabName}-${i}">
+      <div class="item-row">
+        <span class="item-num">${i+1}</span>
+        <span class="item-title">${escHtml(item.title)}</span>
+        <button class="btn-edit" onclick="toggleEdit('${tabName}',${i})">
+          <i class="fas fa-pen"></i> Edit
+        </button>
+        <button class="btn-del" onclick="deleteItem('${tabName}',${i})">
+          <i class="fas fa-trash"></i> Hapus
+        </button>
+      </div>
+      <div class="edit-inline" id="edit-inline-${tabName}-${i}">
+        <textarea id="edit-ta-${tabName}-${i}">${escHtml(item.html)}</textarea>
+        <div class="edit-inline-btns">
+          <button class="btn-update" onclick="replaceItem('${tabName}',${i})">
+            <i class="fas fa-save"></i> Simpan Perubahan
+          </button>
+          <button class="btn-cancel-edit" onclick="toggleEdit('${tabName}',${i})">Batal</button>
+        </div>
+      </div>
     </div>
   `).join('');
+}
+
+function toggleEdit(tabName, index) {
+  const el = document.getElementById(`edit-inline-${tabName}-${index}`);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+// ══════════════════════════════════════════════
+//  EDIT / REPLACE
+// ══════════════════════════════════════════════
+async function replaceItem(tabName, index) {
+  const ta = document.getElementById(`edit-ta-${tabName}-${index}`);
+  const newHtml = ta.value;
+  if (!newHtml.trim()) { alert('Konten tidak boleh kosong'); return; }
+  const cfg = TABS[tabName];
+  const statusEl = document.getElementById(`status-${tabName}`);
+  setStatus(statusEl, 'loading', '⏳ Menyimpan perubahan...');
+  try {
+    const { content } = await getFile(cfg.file);
+    const parts = getSection(content, cfg.section);
+    const newSection = replaceItemInSection(parts.section, cfg.card, index, newHtml);
+    const newContent = setSection(content, cfg.section, newSection);
+    await putFile(cfg.file, newContent, `Edit item ${index+1} di ${cfg.section} via editor`);
+    delete fileCache[cfg.file];
+    await loadTab(tabName);
+  } catch(e) {
+    setStatus(statusEl, 'error', `❌ ${e.message}`);
+  }
+}
+
+function replaceItemInSection(sectionHtml, cardSelector, index, newHtml) {
+  const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html');
+  const cards = doc.querySelectorAll(cardSelector);
+  if (cards[index]) {
+    const tmp = doc.createRange().createContextualFragment(newHtml);
+    cards[index].replaceWith(tmp);
+  }
+  return '\n' + doc.querySelector('div').innerHTML + '\n';
 }
 
 // ══════════════════════════════════════════════
