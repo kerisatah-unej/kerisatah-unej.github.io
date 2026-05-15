@@ -583,7 +583,7 @@ function fillFormFromHtml(tabName, html) {
     setVal('b-judul-en', txt(card, 'h3 .lang-en'));
     setVal('b-desc-id',  txt(card, 'p .lang-id') || txt(card, 'p'));
     setVal('b-desc-en',  txt(card, 'p .lang-en'));
-    setVal('b-tgl',      txt(card, '.meta').replace(/[^ -~]/g,'').trim() || txt(card, '.meta'));
+    setVal('b-tgl',      txt(card, '.meta').replace(/[^\x20-\x7E]/g,'').trim() || txt(card, '.meta'));
     setVal('b-link',     attr(card, 'a.read-more', 'href') || attr(card, 'a', 'href'));
     const catEl = card.querySelector('.cat');
     if (catEl) setSelectByText('b-cat', catEl.textContent.trim());
