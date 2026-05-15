@@ -640,7 +640,7 @@ function openActModal(btn) {
   extraEl.style.display = extraTxt ? 'block' : 'none';
 
   const imgEl = document.getElementById('modal-img');
-  if (foto) { imgEl.src = 'assets/images/' + foto; imgEl.alt = judulId; imgEl.style.display = 'block'; }
+  if (foto) { imgEl.src = foto.split(',')[0].trim(); imgEl.alt = judulId; imgEl.style.display = 'block'; }
   else imgEl.style.display = 'none';
 
   const videoWrap = document.getElementById('modal-video');
