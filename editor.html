@@ -448,10 +448,22 @@ async function getFile(filename) {
   return fileCache[filename];
 }
 async function putFile(filename, newContent, message) {
-  const cached = fileCache[filename];
+  let cached = fileCache[filename];
   if (!cached) throw new Error('File belum dimuat');
-  const result = await ghPut(`/repos/${REPO}/contents/${filename}`, newContent, cached.sha, message);
-  fileCache[filename] = { content: newContent, sha: result.content.sha };
+  try {
+    const result = await ghPut(`/repos/${REPO}/contents/${filename}`, newContent, cached.sha, message);
+    fileCache[filename] = { content: newContent, sha: result.content.sha };
+  } catch(err) {
+    // SHA mismatch — ambil SHA terbaru lalu coba sekali lagi
+    if (err.message && err.message.includes('does not match')) {
+      const fresh = await ghGet(`/repos/${REPO}/contents/${filename}`);
+      fileCache[filename] = { content: fromBase64(fresh.content), sha: fresh.sha };
+      const result = await ghPut(`/repos/${REPO}/contents/${filename}`, newContent, fresh.sha, message);
+      fileCache[filename] = { content: newContent, sha: result.content.sha };
+    } else {
+      throw err;
+    }
+  }
 }
 
 // ══════════════════════════════════════════════
