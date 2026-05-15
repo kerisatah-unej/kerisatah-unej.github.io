@@ -474,7 +474,7 @@ function parseItems(sectionHtml, cardSelector, titleSel) {
   const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html');
   const cards = doc.querySelectorAll(cardSelector);
   return Array.from(cards).map(card => {
-    const titleEl = card.querySelector('.lang-id') || card.querySelector(titleSel) || card.querySelector('h3,h4,h2');
+    const titleEl = card.querySelector(`${titleSel} .lang-id`) || card.querySelector(titleSel) || card.querySelector('h3,h4,h2');
     return { title: titleEl ? titleEl.textContent.trim().slice(0, 80) : '(item)', html: card.outerHTML };
   });
 }
