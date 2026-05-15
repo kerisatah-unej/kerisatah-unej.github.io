@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengabdian Masyarakat — KeRis-Dimas ATAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Activity Cards ── */
+    .activity-hero {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 40px;
+      transition: var(--transition);
+    }
+    .activity-hero:hover { box-shadow: 0 16px 50px rgba(0,0,0,0.14); }
+
+    .activity-video { position:relative; padding-top:56.25%; background:#000; }
+    .activity-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+
+    .activity-body { padding: 32px; }
+    .activity-body .act-category {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+      padding: 4px 14px; border-radius:20px; margin-bottom:14px;
+    }
+    .cat-school { background:var(--blue-pale); color:var(--blue); }
+    .cat-health  { background:var(--green-pale); color:var(--green); }
+    .cat-agri    { background:#FFF3E0; color:#E65100; }
+    .cat-tech    { background:var(--red-pale); color:var(--red); }
+
+    .activity-body h2 { font-size:1.5rem; font-weight:800; margin-bottom:12px; color:var(--dark); line-height:1.4; }
+    .activity-body p  { font-size:0.92rem; color:var(--gray); margin-bottom:12px; line-height:1.8; }
+    .activity-meta { display:flex; gap:20px; flex-wrap:wrap; font-size:0.82rem; color:var(--gray); margin-top:16px; }
+    .activity-meta span { display:flex; align-items:center; gap:6px; }
+    .activity-meta i { color:var(--blue); }
+
+    /* ── Small Activity Card ── */
+    .act-small-card {
+      background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+      overflow:hidden; transition:var(--transition); display:flex; flex-direction:column;
+    }
+    .act-small-card:hover { transform:translateY(-5px); box-shadow:0 14px 40px rgba(0,0,0,0.13); }
+
+    .act-video-wrap { position:relative; padding-top:56.25%; background:var(--dark); }
+    .act-video-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .act-img-wrap {
+      height:200px; overflow:hidden; background:linear-gradient(135deg,var(--blue-pale),var(--green-pale));
+      display:flex; align-items:center; justify-content:center; font-size:4rem;
+    }
+    .act-img-wrap img { width:100%; height:100%; object-fit:cover; }
+
+    .act-card-body { padding:20px; flex:1; }
+    .act-card-body h3 { font-size:1rem; font-weight:700; margin-bottom:8px; color:var(--dark); }
+    .act-card-body p  { font-size:0.85rem; color:var(--gray); margin-bottom:12px; }
+    .act-card-meta    { font-size:0.78rem; color:var(--gray); display:flex; gap:14px; flex-wrap:wrap; }
+
+    /* ── Impact Stats ── */
+    .impact-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:20px; }
+    .impact-box {
+      background:white; border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:28px 20px; text-align:center;
+    }
+    .impact-box .num { font-size:2.2rem; font-weight:900; margin-bottom:4px; }
+    .impact-box .lbl { font-size:0.78rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; }
+
+    /* ── Timeline ── */
+    .act-timeline { position:relative; padding-left:32px; }
+    .act-timeline::before {
+      content:''; position:absolute; left:8px; top:0; bottom:0;
+      width:3px; background:linear-gradient(to bottom,var(--blue),var(--green));
+      border-radius:2px;
+    }
+    .act-timeline-item { position:relative; margin-bottom:32px; }
+    .act-timeline-item::before {
+      content:''; position:absolute; left:-28px; top:6px;
+      width:14px; height:14px; border-radius:50%;
+      border:3px solid white; box-shadow:0 0 0 2px var(--blue);
+      background:var(--blue);
+    }
+    .act-timeline-item.green::before { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+    .act-timeline-item.red::before   { background:var(--red);   box-shadow:0 0 0 2px var(--red); }
+
+    .act-timeline-item .tl-year { font-size:0.72rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+    .act-timeline-item.green .tl-year { color:var(--green); }
+    .act-timeline-item.red   .tl-year { color:var(--red); }
+    .act-timeline-item h4    { font-size:0.96rem; font-weight:700; margin-bottom:4px; }
+    .act-timeline-item p     { font-size:0.84rem; color:var(--gray); margin:0; }
+
+    @media(max-width:768px) {
+      .act-grid-2 { grid-template-columns:1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-circle">A</div>
+    <div class="brand-text">
+      <div class="brand-main">KeRis-Dimas ATAH</div>
+      <div class="brand-sub">Universitas Jember</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+    <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+    <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+    <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+    <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+    <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+    <li><a href="pengabdian.html" class="active"><span class="lang-id">Pengabdian</span><span class="lang-en">Community</span></a></li>
+    <li><a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+    <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+    <li><div class="lang-btn"><button id="btn-id" class="active">ID</button><button id="btn-en">EN</button></div></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ══════════════════ PAGE HEADER ══════════════════ -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span><span class="lang-id">Pengabdian Masyarakat</span><span class="lang-en">Community Service</span></span>
+    </div>
+    <h1>
+      <span class="lang-id">Pengabdian Masyarakat</span>
+      <span class="lang-en">Community Service</span>
+    </h1>
+    <p>
+      <span class="lang-id">Menerapkan hasil riset untuk manfaat nyata bagi masyarakat luas</span>
+      <span class="lang-en">Applying research results for real benefits to the wider community</span>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════ IMPACT STATS ══════════════════ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-target="5" data-suffix="+">0</div>
+        <div class="stat-label"><span class="lang-id">Kegiatan Pengabdian</span><span class="lang-en">Community Activities</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="200" data-suffix="+">0</div>
+        <div class="stat-label"><span class="lang-id">Peserta Terlibat</span><span class="lang-en">Participants</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="3">0</div>
+        <div class="stat-label"><span class="lang-id">Bidang Kegiatan</span><span class="lang-en">Activity Fields</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="2018">0</div>
+        <div class="stat-label"><span class="lang-id">Mulai Aktif</span><span class="lang-en">Active Since</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ KEGIATAN UNGGULAN ══════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-blue">⭐ <span class="lang-id">Kegiatan Unggulan</span><span class="lang-en">Featured Activity</span></span>
+      <h2><span class="lang-id">Kegiatan Terbaru & Unggulan</span><span class="lang-en">Latest & Featured Activities</span></h2>
+      <div class="section-divider divider-blue"></div>
+    </div>
+
+    <!-- ── KEGIATAN UTAMA: Pelatihan Robot untuk Anak Sekolah ── -->
+    <div class="activity-hero">
+      <div class="activity-video">
+        <iframe
+          src="https://www.youtube.com/embed/qK3OgOzMzBs"
+          title="Pelatihan Robot untuk Anak Sekolah — KeRis ATAH"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="activity-body">
+        <span class="act-category cat-school">🏫 <span class="lang-id">Pendidikan</span><span class="lang-en">Education</span></span>
+        <h2>
+          <span class="lang-id">Pelatihan Robotika untuk Siswa Sekolah</span>
+          <span class="lang-en">Robotics Training for School Students</span>
+        </h2>
+        <p>
+          <span class="lang-id">
+            KeRis-Dimas ATAH aktif melakukan pengabdian di bidang pendidikan dengan memberikan pelatihan robotika
+            kepada siswa sekolah di Jember dan sekitarnya. Kegiatan ini bertujuan memperkenalkan teknologi robot
+            kepada generasi muda sejak dini, menginspirasi minat di bidang STEM (Sains, Teknologi, Teknik, Matematika),
+            serta membangun kesadaran tentang peran teknologi dalam kehidupan sehari-hari.
+          </span>
+          <span class="lang-en">
+            KeRis-Dimas ATAH actively conducts community service in the education sector by providing robotics training
+            to school students in Jember and surrounding areas. This activity aims to introduce robot technology to young
+            generations early, inspire interest in STEM (Science, Technology, Engineering, Mathematics), and build
+            awareness of the role of technology in daily life.
+          </span>
+        </p>
+        <p>
+          <span class="lang-id">
+            Dalam pelatihan ini, siswa mendapat kesempatan langsung berinteraksi dengan prototipe robot yang telah
+            dikembangkan oleh tim KeRis ATAH, memahami konsep dasar kendali robot, dan bahkan mencoba memprogram
+            gerakan sederhana secara mandiri.
+          </span>
+          <span class="lang-en">
+            In this training, students get direct opportunities to interact with robot prototypes developed by the
+            KeRis ATAH team, understand basic robot control concepts, and even try to program simple movements independently.
+          </span>
+        </p>
+        <div class="activity-meta">
+          <span><i class="fas fa-map-marker-alt"></i> Jember, Jawa Timur</span>
+          <span><i class="fas fa-users"></i> <span class="lang-id">Siswa SD–SMA</span><span class="lang-en">Elementary–High School Students</span></span>
+          <span><i class="fas fa-robot"></i> <span class="lang-id">Robotika & STEM</span><span class="lang-en">Robotics & STEM</span></span>
+          <span><i class="fas fa-play-circle"></i> <a href="https://www.youtube.com/watch?v=qK3OgOzMzBs" target="_blank" style="color:var(--blue);">YouTube</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ KEGIATAN LAINNYA ══════════════════ -->
+<section class="bg-light">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-green">🌱 <span class="lang-id">Semua Kegiatan</span><span class="lang-en">All Activities</span></span>
+      <h2><span class="lang-id">Kegiatan Pengabdian Masyarakat</span><span class="lang-en">Community Service Activities</span></h2>
+      <div class="section-divider divider-green"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;" class="act-grid">
+
+      <!-- 1. Pelatihan Robot Sterilisasi -->
+      <div class="act-small-card">
+        <div class="act-img-wrap">🤖</div>
+        <div class="act-card-body">
+          <span class="act-category cat-health" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
+            🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span>
+          </span>
+          <h3>
+            <span class="lang-id">Pelatihan Penggunaan Robot Sterilisasi</span>
+            <span class="lang-en">Sterilization Robot Operation Training</span>
+          </h3>
+          <p>
+            <span class="lang-id">
+              Pelatihan pengoperasian Robot Desinfektan UV (BOTANUV-19) bagi tenaga medis dan paramedis
+              rumah sakit di Jember. Peserta diajarkan cara mengoperasikan dan merawat robot sterilisasi
+              untuk menjaga kebersihan ruang isolasi.
+            </span>
+            <span class="lang-en">
+              Operation training for UV Disinfectant Robot (BOTANUV-19) for medical staff and paramedics
+              at Jember hospitals. Participants were taught how to operate and maintain the sterilization
+              robot for keeping isolation rooms clean.
+            </span>
+          </p>
+          <div class="act-card-meta">
+            <span><i class="fas fa-hospital" style="color:var(--blue);"></i> <span class="lang-id">Rumah Sakit Jember</span><span class="lang-en">Jember Hospitals</span></span>
+            <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2020</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Sosialisasi Smart Wheelchair -->
+      <div class="act-small-card">
+        <div class="act-img-wrap">♿</div>
+        <div class="act-card-body">
+          <span class="act-category cat-health" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
+            🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span>
+          </span>
+          <h3>
+            <span class="lang-id">Sosialisasi Smart Wheelchair untuk Penyandang Disabilitas</span>
+            <span class="lang-en">Smart Wheelchair Socialization for People with Disabilities</span>
+          </h3>
+          <p>
+            <span class="lang-id">
+              Kegiatan sosialisasi dan demonstrasi kursi roda elektrik cerdas kepada penyandang
+              disabilitas dan komunitas difabel di Jember. Peserta dapat mencoba langsung kursi roda
+              yang dikendalikan dengan sinyal EMG dan CNN.
+            </span>
+            <span class="lang-en">
+              Socialization and demonstration of intelligent electric wheelchair to people with
+              disabilities and disability communities in Jember. Participants can directly try the
+              wheelchair controlled by EMG signals and CNN.
+            </span>
+          </p>
+          <div class="act-card-meta">
+            <span><i class="fas fa-map-marker-alt" style="color:var(--blue);"></i> Jember</span>
+            <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2023</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Aquakultur -->
+      <div class="act-small-card">
+        <div class="act-img-wrap">🐟</div>
+        <div class="act-card-body">
+          <span class="act-category cat-agri" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
+            🌾 <span class="lang-id">Pertanian</span><span class="lang-en">Agriculture</span>
+          </span>
+          <h3>
+            <span class="lang-id">Pengabdian Teknologi Akuakultur untuk Petani</span>
+            <span class="lang-en">Aquaculture Technology Service for Farmers</span>
+          </h3>
+          <p>
+            <span class="lang-id">
+              Pendampingan petani budidaya ikan dan udang dalam penerapan sistem monitoring akuakultur
+              berbasis sensor dan IoT. Petani dilatih menggunakan sistem pemantauan kualitas air secara otomatis
+              untuk meningkatkan produktivitas budidaya.
+            </span>
+            <span class="lang-en">
+              Assistance for fish and shrimp farmers in implementing sensor and IoT-based aquaculture
+              monitoring systems. Farmers were trained to use automatic water quality monitoring systems
+              to improve cultivation productivity.
+            </span>
+          </p>
+          <div class="act-card-meta">
+            <span><i class="fas fa-map-marker-alt" style="color:var(--green);"></i> <span class="lang-id">Jember & sekitarnya</span><span class="lang-en">Jember & surroundings</span></span>
+            <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2022</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Fermentor MOCAF -->
+      <div class="act-small-card">
+        <div class="act-img-wrap">⚗️</div>
+        <div class="act-card-body">
+          <span class="act-category cat-agri" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
+            🌾 <span class="lang-id">Pertanian</span><span class="lang-en">Agriculture</span>
+          </span>
+          <h3>
+            <span class="lang-id">Pelatihan Fermentor MOCAF untuk UKM</span>
+            <span class="lang-en">MOCAF Fermenter Training for SMEs</span>
+          </h3>
+          <p>
+            <span class="lang-id">
+              Pelatihan penggunaan fermentor MOCAF (Modified Cassava Flour) kepada kelompok tani dan
+              UKM di Jember. Teknologi fermentasi otomatis ini membantu meningkatkan kualitas dan
+              produktivitas tepung cassava modifikasi yang bernilai ekonomi tinggi.
+            </span>
+            <span class="lang-en">
+              Training on the use of MOCAF (Modified Cassava Flour) fermenter for farmer groups
+              and SMEs in Jember. This automatic fermentation technology helps improve the quality
+              and productivity of high-value modified cassava flour.
+            </span>
+          </p>
+          <div class="act-card-meta">
+            <span><i class="fas fa-store" style="color:var(--green);"></i> UKM Jember</span>
+            <span><i class="fas fa-calendar" style="color:var(--gray);"></i> 2022–2023</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Pelatihan STEM Mahasiswa -->
+      <div class="act-small-card">
+        <div class="act-img-wrap" style="background:linear-gradient(135deg,#E8EAF6,var(--blue-pale));">🎓</div>
+        <div class="act-card-body">
+          <span class="act-category cat-tech" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
+            💡 <span class="lang-id">Teknologi</span><span class="lang-en">Technology</span>
+          </span>
+          <h3>
+            <span class="lang-id">Workshop AI & Robotik untuk Mahasiswa</span>
+            <span class="lang-en">AI & Robotics Workshop for University Students</span>
+          </h3>
+          <p>
+            <span class="lang-id">
+              Workshop intensif kecerdasan buatan dan robotika untuk mahasiswa S1 Universitas Jember
+              dan kampus sekitarnya. Topik meliputi deep learning, pengolahan sinyal EMG, navigasi
+              robot, dan pengembangan prototipe berbasis Arduino/Raspberry Pi.
+            </span>
+            <span class="lang-en">
+              Intensive artificial intelligence and robotics workshop for undergraduate students at
+              Universitas Jember and nearby campuses. Topics include deep learning, EMG signal
+              processing, robot navigation, and Arduino/Raspberry Pi-based prototype development.
+            </span>
+          </p>
+          <div class="act-card-meta">
+            <span><i class="fas fa-university" style="color:var(--red);"></i> UNEJ</span>
+            <span><i class="fas fa-calendar" style="color:var(--gray);"></i> <span class="lang-id">Rutin</span><span class="lang-en">Ongoing</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slot: Tambah Kegiatan Baru -->
+      <div style="border:2px dashed #C5D5E8;border-radius:var(--radius);padding:32px;text-align:center;color:var(--gray);background:var(--light-gray);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;">
+        <i class="fas fa-plus-circle" style="font-size:2.5rem;color:#C5D5E8;margin-bottom:16px;"></i>
+        <h4 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;color:var(--gray);">
+          <span class="lang-id">Tambahkan Kegiatan Baru</span>
+          <span class="lang-en">Add New Activity</span>
+        </h4>
+        <p style="font-size:0.82rem;margin-bottom:16px;">
+          <span class="lang-id">Gunakan halaman Editor untuk menambah kegiatan pengabdian terbaru</span>
+          <span class="lang-en">Use the Editor page to add the latest community service activities</span>
+        </p>
+        <a href="editor.html#pengabdian" class="btn btn-primary btn-sm">
+          <i class="fas fa-edit"></i>
+          <span class="lang-id">Buka Editor</span><span class="lang-en">Open Editor</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TIMELINE ══════════════════ -->
+<section>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;" class="act-grid-2">
+      <div>
+        <div class="section-header" style="text-align:left;margin-bottom:32px;">
+          <span class="section-tag tag-blue"><span class="lang-id">Kronologi</span><span class="lang-en">Timeline</span></span>
+          <h2 style="font-size:1.6rem;"><span class="lang-id">Perjalanan Pengabdian</span><span class="lang-en">Service Journey</span></h2>
+          <div class="section-divider divider-blue" style="margin-left:0;"></div>
+        </div>
+        <div class="act-timeline">
+          <div class="act-timeline-item">
+            <div class="tl-year">2018–2019</div>
+            <h4><span class="lang-id">Pengabdian Pertama</span><span class="lang-en">First Service</span></h4>
+            <p><span class="lang-id">Mulai aktif pengabdian bersama komunitas difabel dan rumah sakit di Jember</span><span class="lang-en">Started active service with disability communities and hospitals in Jember</span></p>
+          </div>
+          <div class="act-timeline-item green">
+            <div class="tl-year">2020</div>
+            <h4><span class="lang-id">Respons COVID-19</span><span class="lang-en">COVID-19 Response</span></h4>
+            <p><span class="lang-id">Pelatihan Robot Sterilisasi BOTANUV-19 untuk tenaga medis rumah sakit</span><span class="lang-en">Sterilization Robot BOTANUV-19 training for hospital medical staff</span></p>
+          </div>
+          <div class="act-timeline-item">
+            <div class="tl-year">2022</div>
+            <h4><span class="lang-id">Pengabdian Pertanian</span><span class="lang-en">Agricultural Service</span></h4>
+            <p><span class="lang-id">Pendampingan petani akuakultur & pelatihan Fermentor MOCAF untuk UKM</span><span class="lang-en">Aquaculture farmer assistance & MOCAF Fermenter training for SMEs</span></p>
+          </div>
+          <div class="act-timeline-item red">
+            <div class="tl-year">2023</div>
+            <h4><span class="lang-id">Pelatihan Robotik Sekolah</span><span class="lang-en">School Robotics Training</span></h4>
+            <p><span class="lang-id">Pelatihan robotika untuk siswa SD–SMA & sosialisasi Smart Wheelchair</span><span class="lang-en">Robotics training for school students & Smart Wheelchair socialization</span></p>
+          </div>
+          <div class="act-timeline-item green">
+            <div class="tl-year">2024 – ...</div>
+            <h4><span class="lang-id">Pengabdian Berkelanjutan</span><span class="lang-en">Ongoing Service</span></h4>
+            <p><span class="lang-id">Program berkelanjutan: workshop AI/Robotik, pendampingan UKM, edukasi STEM</span><span class="lang-en">Ongoing programs: AI/Robotics workshops, SME assistance, STEM education</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rencana Pengabdian -->
+      <div>
+        <div class="section-header" style="text-align:left;margin-bottom:32px;">
+          <span class="section-tag tag-green"><span class="lang-id">Rencana</span><span class="lang-en">Plans</span></span>
+          <h2 style="font-size:1.6rem;"><span class="lang-id">Rencana Pengabdian ke Depan</span><span class="lang-en">Future Service Plans</span></h2>
+          <div class="section-divider divider-green" style="margin-left:0;"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="background:var(--blue-pale);border-radius:12px;padding:20px;border-left:4px solid var(--blue);">
+            <h4 style="color:var(--blue);font-size:0.95rem;font-weight:700;margin-bottom:8px;">
+              🏫 <span class="lang-id">Edukasi STEM Sekolah</span><span class="lang-en">School STEM Education</span>
+            </h4>
+            <p style="font-size:0.84rem;color:var(--gray);margin:0;">
+              <span class="lang-id">Perluasan program pelatihan robotik ke lebih banyak sekolah di Jawa Timur, termasuk daerah terpencil</span>
+              <span class="lang-en">Expanding robotics training programs to more schools in East Java, including remote areas</span>
+            </p>
+          </div>
+          <div style="background:var(--green-pale);border-radius:12px;padding:20px;border-left:4px solid var(--green);">
+            <h4 style="color:var(--green);font-size:0.95rem;font-weight:700;margin-bottom:8px;">
+              🌾 <span class="lang-id">Smart Farming Desa</span><span class="lang-en">Village Smart Farming</span>
+            </h4>
+            <p style="font-size:0.84rem;color:var(--gray);margin:0;">
+              <span class="lang-id">Implementasi precision farming & smart tractor di kelompok tani desa untuk meningkatkan produktivitas panen</span>
+              <span class="lang-en">Implementing precision farming & smart tractor in village farmer groups to increase harvest productivity</span>
+            </p>
+          </div>
+          <div style="background:var(--red-pale);border-radius:12px;padding:20px;border-left:4px solid var(--red);">
+            <h4 style="color:var(--red);font-size:0.95rem;font-weight:700;margin-bottom:8px;">
+              🦽 <span class="lang-id">Klinik Alat Bantu Disabilitas</span><span class="lang-en">Disability Aid Clinic</span>
+            </h4>
+            <p style="font-size:0.84rem;color:var(--gray);margin:0;">
+              <span class="lang-id">Program klinik gratis untuk penyandang disabilitas yang membutuhkan alat bantu teknologi dari KeRis ATAH</span>
+              <span class="lang-en">Free clinic program for people with disabilities needing technological assistance from KeRis ATAH</span>
+            </p>
+          </div>
+          <div style="background:#FFF3E0;border-radius:12px;padding:20px;border-left:4px solid #E65100;">
+            <h4 style="color:#E65100;font-size:0.95rem;font-weight:700;margin-bottom:8px;">
+              ☕ <span class="lang-id">Kopi Spesialiti Jember</span><span class="lang-en">Jember Specialty Coffee</span>
+            </h4>
+            <p style="font-size:0.84rem;color:var(--gray);margin:0;">
+              <span class="lang-id">Pendampingan petani kopi menggunakan Fermentor Kopi Spesialiti dan Mesin Pengering Kopi hasil riset ATAH</span>
+              <span class="lang-en">Mentoring coffee farmers using Specialty Coffee Fermenter and Coffee Dryer Machine from ATAH research</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA ══════════════════ -->
+<section style="background:linear-gradient(135deg,var(--blue),var(--green));padding:70px 0;text-align:center;">
+  <div class="container">
+    <h2 style="color:white;font-size:1.8rem;font-weight:800;margin-bottom:12px;">
+      <span class="lang-id">Ingin Berkolaborasi dalam Program Pengabdian?</span>
+      <span class="lang-en">Want to Collaborate in Community Service Programs?</span>
+    </h2>
+    <p style="color:rgba(255,255,255,0.85);max-width:550px;margin:0 auto 28px;">
+      <span class="lang-id">Kami terbuka bagi sekolah, rumah sakit, komunitas tani, dan masyarakat umum yang ingin bermitra dalam kegiatan pengabdian.</span>
+      <span class="lang-en">We are open to schools, hospitals, farming communities, and the general public who want to partner in community service activities.</span>
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="contact.html" class="btn" style="background:white;color:var(--blue);border-color:white;">
+        <i class="fas fa-handshake"></i>
+        <span class="lang-id">Hubungi Kami</span><span class="lang-en">Contact Us</span>
+      </a>
+      <a href="mailto:keristatah@gmail.com" class="btn btn-outline">
+        <i class="fas fa-envelope"></i>
+        keristatah@gmail.com
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="name">KeRis-Dimas ATAH</div><div class="sub">Advanced Technology for Agriculture and Health</div></div>
+        <p><span class="lang-id">Kelompok Riset Universitas Jember.</span><span class="lang-en">Research Group of Universitas Jember.</span></p>
+        <div class="footer-socials" style="margin-top:16px;">
+          <a href="mailto:keristatah@gmail.com" class="footer-social-btn"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/kerisatah-unej" target="_blank" class="footer-social-btn"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Menu</h4><ul>
+        <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+        <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+        <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+        <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4><span class="lang-id">Pengabdian</span><span class="lang-en">Community</span></h4><ul>
+        <li><a href="pengabdian.html#"><span class="lang-id">Pelatihan Robotik</span><span class="lang-en">Robotics Training</span></a></li>
+        <li><a href="pengabdian.html#"><span class="lang-id">Robot Sterilisasi</span><span class="lang-en">Sterilization Robot</span></a></li>
+        <li><a href="pengabdian.html#"><span class="lang-id">Smart Farming</span><span class="lang-en">Smart Farming</span></a></li>
+        <li><a href="contact.html"><span class="lang-id">Kerjasama</span><span class="lang-en">Collaboration</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kontak</h4><ul>
+        <li><a href="mailto:keristatah@gmail.com">keristatah@gmail.com</a></li>
+        <li><a href="https://unej.ac.id" target="_blank">Universitas Jember</a></li>
+        <li><a href="contact.html"><span class="lang-id">Formulir Kontak</span><span class="lang-en">Contact Form</span></a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 KeRis-Dimas ATAH — Universitas Jember.</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+<script src="js/main.js"></script>
+</body>
+</html>

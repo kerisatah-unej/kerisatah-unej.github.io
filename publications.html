@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publikasi — KeRis-Dimas ATAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+    .filter-btn { padding:7px 18px; border-radius:30px; border:2px solid #E0E0E0; background:white; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--gray); }
+    .filter-btn.active, .filter-btn:hover { border-color:var(--blue); background:var(--blue); color:white; }
+    .pub-card { transition: all 0.3s; }
+    .pub-card.hidden { display:none; }
+    .search-box { position:relative; margin-bottom:24px; }
+    .search-box input { width:100%; padding:12px 16px 12px 44px; border:2px solid #E0E0E0; border-radius:12px; font-size:0.9rem; font-family:inherit; outline:none; transition:all 0.2s; background:white; }
+    .search-box input:focus { border-color:var(--blue); }
+    .search-box .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--gray); }
+    .stat-chips { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px; }
+    .stat-chip { background:white; border-radius:10px; padding:14px 20px; box-shadow:var(--shadow); text-align:center; min-width:110px; }
+    .stat-chip .num { font-size:1.5rem; font-weight:900; }
+    .stat-chip .lbl { font-size:0.72rem; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-circle">A</div>
+    <div class="brand-text">
+      <div class="brand-main">KeRis-Dimas ATAH</div>
+      <div class="brand-sub">Universitas Jember</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+    <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+    <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+    <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+    <li><a href="publications.html" class="active"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+    <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="pengabdian.html"><span class="lang-id">Pengabdian</span><span class="lang-en">Service</span></a></li>
+    <li><a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+    <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+    <li><div class="lang-btn"><button id="btn-id" class="active">ID</button><button id="btn-en">EN</button></div></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></span>
+    </div>
+    <h1><span class="lang-id">Publikasi Ilmiah</span><span class="lang-en">Scientific Publications</span></h1>
+    <p><span class="lang-id">Jurnal, prosiding, dan buku karya anggota KeRis-Dimas ATAH</span><span class="lang-en">Journals, proceedings, and books by KeRis-Dimas ATAH members</span></p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+
+    <!-- Stats -->
+    <div class="stat-chips">
+      <div class="stat-chip"><div class="num text-blue">50+</div><div class="lbl"><span class="lang-id">Total Publikasi</span><span class="lang-en">Total Publications</span></div></div>
+      <div class="stat-chip"><div class="num text-green">15+</div><div class="lbl">Scopus Q1/Q2</div></div>
+      <div class="stat-chip"><div class="num text-red">5+</div><div class="lbl">Web of Science</div></div>
+      <div class="stat-chip"><div class="num" style="color:#E65100;">5+</div><div class="lbl"><span class="lang-id">Paten & HKI</span><span class="lang-en">Patents & IPR</span></div></div>
+      <div class="stat-chip"><div class="num" style="color:var(--blue);">1</div><div class="lbl"><span class="lang-id">Buku</span><span class="lang-en">Book</span></div></div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="pub-search" placeholder="Cari judul, penulis, atau jurnal... / Search title, author, or journal...">
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">
+        <span class="lang-id">Semua</span><span class="lang-en">All</span>
+      </button>
+      <button class="filter-btn" data-filter="scopus">Scopus</button>
+      <button class="filter-btn" data-filter="wos">Web of Science</button>
+      <button class="filter-btn" data-filter="sinta">SINTA</button>
+      <button class="filter-btn" data-filter="q1">Q1</button>
+      <button class="filter-btn" data-filter="q2">Q2</button>
+      <button class="filter-btn" data-filter="book"><span class="lang-id">Buku</span><span class="lang-en">Book</span></button>
+    </div>
+
+    <!-- Publication List -->
+    <div class="pub-list" id="pub-list">
+
+      <!-- Q2 Scopus -->
+      <div class="pub-card q2" data-tags="scopus q2 anam 2021">
+        <div class="pub-meta">
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-badge badge-q2">Q2</span>
+          <span class="pub-year">2021</span>
+        </div>
+        <h4>Improved myoelectric pattern recognition of finger movement using rejection-based extreme learning machine</h4>
+        <div class="pub-journal">Telkomnika (Telecommunication Computing Electronics and Control) · Anam K.</div>
+      </div>
+
+      <!-- WoS Q2 -->
+      <div class="pub-card q2" data-tags="wos q2 anam 2018">
+        <div class="pub-meta">
+          <span class="pub-badge badge-wos">Web of Science</span>
+          <span class="pub-badge badge-q2">Q2</span>
+          <span class="pub-year">2018</span>
+        </div>
+        <h4>Evaluation of feature extraction techniques and classifiers for finger movement recognition using surface electromyography signal</h4>
+        <div class="pub-journal">Medical & Biological Engineering & Computing · Phukpattaranont P., Anam K. et al. · <strong>11 cited</strong></div>
+      </div>
+
+      <!-- WoS Q2 2017 -->
+      <div class="pub-card q2" data-tags="wos scopus q2 anam 2017">
+        <div class="pub-meta">
+          <span class="pub-badge badge-wos">Web of Science</span>
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-badge badge-q2">Q2</span>
+          <span class="pub-year">2017</span>
+        </div>
+        <h4>Evaluation of extreme learning machine for classification of individual and combined finger movements using electromyography on amputees and non-amputees</h4>
+        <div class="pub-journal">Neural Networks · Anam K., Al-Jumaily A. · <strong>26 cited</strong></div>
+      </div>
+
+      <!-- WoS 2017 Myoelectric -->
+      <div class="pub-card q2" data-tags="wos scopus q2 anam rosyadi 2017">
+        <div class="pub-meta">
+          <span class="pub-badge badge-wos">Web of Science</span>
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-year">2017</span>
+        </div>
+        <h4>Myoelectric control systems for hand rehabilitation device: a review</h4>
+        <div class="pub-journal">4th International Conference on Electrical Engineering, Computer Science and Informatics (EECSI) · Anam K., Rosyadi AA. · <strong>7 cited</strong></div>
+      </div>
+
+      <!-- WoS 2015 Skin Cancer -->
+      <div class="pub-card" data-tags="wos anam 2015">
+        <div class="pub-meta">
+          <span class="pub-badge badge-wos">Web of Science</span>
+          <span class="pub-year">2015</span>
+        </div>
+        <h4>Self-Supervised Learning Model for Skin Cancer Diagnosis</h4>
+        <div class="pub-journal">International IEEE/EMBS Conference on Neural Engineering (NER) · Masood A., Anam K. · <strong>27 cited</strong></div>
+      </div>
+
+      <!-- WoS 2016 Adaptive -->
+      <div class="pub-card" data-tags="wos anam 2016">
+        <div class="pub-meta">
+          <span class="pub-badge badge-wos">Web of Science</span>
+          <span class="pub-year">2016</span>
+        </div>
+        <h4>Adaptive myoelectric pattern recognition for arm movement in different positions using advanced online sequential extreme learning machine</h4>
+        <div class="pub-journal">Annual International Conference of the IEEE Engineering in Medicine and Biology · Anam K., Al-Jumaily A. · <strong>2 cited</strong></div>
+      </div>
+
+      <!-- Scopus 2021 EEG -->
+      <div class="pub-card" data-tags="scopus anam 2021">
+        <div class="pub-meta">
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-year">2021</span>
+        </div>
+        <h4>Artificial Intelligence IoT based EEG Application using Deep Learning for Movement Classification</h4>
+        <div class="pub-journal">International Conference on Electrical Engineering, Computer Science and Informatics (EECSI) · Anam K. et al.</div>
+      </div>
+
+      <!-- Scopus 2021 Navigation -->
+      <div class="pub-card" data-tags="scopus chaidir anam 2021">
+        <div class="pub-meta">
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-year">2021</span>
+        </div>
+        <h4>Navigation System for Olfactory Mobile Robot by Using Machine Vision System</h4>
+        <div class="pub-journal">2021 IEEE 7th International Conference on Smart Instrumentation, Measurement and Applications (ICSIMA) · Chaidir AR., Anam K. et al.</div>
+      </div>
+
+      <!-- Scopus 2021 Hydroponics -->
+      <div class="pub-card q1" data-tags="scopus q1 anam 2021">
+        <div class="pub-meta">
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-badge" style="background:#E8F5E9;color:#1B5E20;">Q1</span>
+          <span class="pub-year">2021</span>
+        </div>
+        <h4>Comprehensive measurement and evaluation of modern paddy cultivation with a hydroganics system under different nutrient regimes using WSN and ground-based remote sensing</h4>
+        <div class="pub-journal">Measurement: Journal of the International Measurement Confederation · Putra BTW. et al. · <strong>5 cited</strong></div>
+      </div>
+
+      <!-- Sinta S2 Lane Tracking -->
+      <div class="pub-card" data-tags="sinta chaidir anam 2020">
+        <div class="pub-meta">
+          <span class="pub-badge badge-sinta">Sinta 2</span>
+          <span class="pub-year">2020</span>
+        </div>
+        <h4>Lane Tracking pada Robot Beroda Holonomic menggunakan Pengolahan Citra</h4>
+        <div class="pub-journal">ELKOMIKA: Jurnal Teknik Energi Elektrik, Teknik Telekomunikasi, & Teknik … · Chaidir AR., Anam K. · <strong>5 cited</strong></div>
+      </div>
+
+      <!-- Sinta S2 EMG Wahyu -->
+      <div class="pub-card" data-tags="sinta muldayani anam 2020">
+        <div class="pub-meta">
+          <span class="pub-badge badge-sinta">Sinta 2</span>
+          <span class="pub-year">2020</span>
+        </div>
+        <h4>Pengenalan Pola Sinyal Electromyography (EMG) pada Gerakan Jari Tangan Kanan</h4>
+        <div class="pub-journal">ELKOMIKA: Jurnal Teknik Energi Elektrik · Muldayani W., Anam K. et al.</div>
+      </div>
+
+      <!-- Sinta S2 Wheelchair -->
+      <div class="pub-card" data-tags="sinta anam 2021">
+        <div class="pub-meta">
+          <span class="pub-badge badge-sinta">Sinta 2</span>
+          <span class="pub-year">2021</span>
+        </div>
+        <h4>Sistem Navigasi Kursi Roda Elektrik Untuk Pasien Penyandang Cacat Fisik Menggunakan Metode Convolutional Neural Network</h4>
+        <div class="pub-journal">Jurnal Rekayasa Elektrika 17 (1) · Sutikno S., Anam K.</div>
+      </div>
+
+      <!-- Sinta S2 EMG Command -->
+      <div class="pub-card" data-tags="sinta muldayani anam 2019">
+        <div class="pub-meta">
+          <span class="pub-badge badge-sinta">Sinta 2</span>
+          <span class="pub-year">2019</span>
+        </div>
+        <h4>Perintah Kontrol Gerak Kursi Roda Elektrik Menggunakan Sensor Elektromiograf</h4>
+        <div class="pub-journal">Jurnal Rekayasa Elektrika 15 (1) · Muldayani W. et al. · <strong>1 cited</strong></div>
+      </div>
+
+      <!-- Book -->
+      <div class="pub-card" data-tags="book anam 2019" style="border-left-color:var(--red);">
+        <div class="pub-meta">
+          <span class="pub-badge" style="background:var(--red-pale);color:var(--red);">📚 Buku</span>
+          <span class="pub-year">2019</span>
+        </div>
+        <h4>Sistem Kontrol Robot untuk Rehabilitasi</h4>
+        <div class="pub-journal">UPT Penerbitan Universitas Jember · Anam K. · ISBN: 9786025617911 · <strong>1 cited</strong></div>
+      </div>
+
+      <!-- Scopus 2020 BCI -->
+      <div class="pub-card" data-tags="scopus anam 2020">
+        <div class="pub-meta">
+          <span class="pub-badge badge-scopus">Scopus</span>
+          <span class="pub-year">2020</span>
+        </div>
+        <h4>Subject-independent Classification on Brain-Computer Interface using Autonomous Deep Learning for finger movement recognition</h4>
+        <div class="pub-journal">2020 42nd Annual International Conference of the IEEE Engineering in Medicine and Biology · Anam K. et al. · <strong>3 cited</strong></div>
+      </div>
+
+    </div><!-- end pub-list -->
+
+    <!-- Note for editors -->
+    <div style="background:var(--blue-pale);border-radius:12px;padding:20px 24px;margin-top:32px;display:flex;gap:12px;align-items:flex-start;">
+      <i class="fas fa-info-circle" style="color:var(--blue);margin-top:2px;"></i>
+      <p style="margin:0;font-size:0.85rem;color:var(--blue);">
+        <span class="lang-id"><strong>Untuk editor:</strong> Tambahkan publikasi baru dengan menyalin blok <code>&lt;div class="pub-card"&gt;</code> di atas dan sesuaikan data-tags untuk filter otomatis (misal: <code>data-tags="scopus q1 anam 2024"</code>).</span>
+        <span class="lang-en"><strong>For editors:</strong> Add new publications by copying a <code>&lt;div class="pub-card"&gt;</code> block above and adjusting data-tags for automatic filtering (e.g., <code>data-tags="scopus q1 anam 2024"</code>).</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="name">KeRis-Dimas ATAH</div><div class="sub">Advanced Technology for Agriculture and Health</div></div>
+        <p><span class="lang-id">Kelompok Riset Universitas Jember.</span><span class="lang-en">Research Group of Universitas Jember.</span></p>
+        <div class="footer-socials" style="margin-top:16px;">
+          <a href="mailto:keristatah@gmail.com" class="footer-social-btn"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/kerisatah-unej" target="_blank" class="footer-social-btn"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Menu</h4><ul>
+        <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+        <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+        <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4>SINTA</h4><ul>
+        <li><a href="https://sinta.kemdikbud.go.id/authors/profile/55778" target="_blank">Khairul Anam</a></li>
+        <li><a href="https://sinta.kemdikbud.go.id/authors/profile/6660229" target="_blank">Aris Z. Muttaqin</a></li>
+        <li><a href="https://sinta.kemdikbud.go.id/authors/profile/6062588" target="_blank">Sumardi</a></li>
+        <li><a href="https://sinta.kemdikbud.go.id/authors/profile/6658246" target="_blank">Wahyu Muldayani</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kontak</h4><ul>
+        <li><a href="mailto:keristatah@gmail.com">keristatah@gmail.com</a></li>
+        <li><a href="https://unej.ac.id" target="_blank">Universitas Jember</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 KeRis-Dimas ATAH — Universitas Jember.</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+<script src="js/main.js"></script>
+<script>
+  // Filter publications
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const pubCards   = document.querySelectorAll('#pub-list .pub-card');
+  const searchInput = document.getElementById('pub-search');
+
+  function applyFilters() {
+    const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+    const query = searchInput.value.toLowerCase();
+    pubCards.forEach(card => {
+      const tags = card.dataset.tags || '';
+      const text = card.textContent.toLowerCase();
+      const matchFilter = activeFilter === 'all' || tags.includes(activeFilter);
+      const matchSearch = query === '' || text.includes(query);
+      card.classList.toggle('hidden', !(matchFilter && matchSearch));
+    });
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', applyFilters);
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Berita — KeRis-Dimas ATAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .news-hero-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 40px;
+      transition: var(--transition);
+    }
+    .news-hero-card:hover { box-shadow: 0 16px 50px rgba(0,0,0,0.14); }
+    .news-hero-img {
+      min-height: 280px;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+    }
+    .news-hero-img img { width:100%; height:100%; object-fit:cover; }
+    .news-hero-body { padding: 36px; display:flex; flex-direction:column; justify-content:center; }
+    .news-hero-body .category { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue); margin-bottom:10px; }
+    .news-hero-body h2 { font-size:1.4rem; font-weight:800; margin-bottom:12px; color:var(--dark); line-height:1.4; }
+    .news-hero-body p { font-size:0.88rem; color:var(--gray); margin-bottom:20px; }
+    .news-hero-body .meta { font-size:0.78rem; color:var(--gray); display:flex; gap:16px; }
+    @media(max-width:768px){ .news-hero-card { grid-template-columns:1fr; } }
+
+    .news-small-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      gap: 0;
+      flex-direction: column;
+    }
+    .news-small-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,0.12); }
+    .news-small-img {
+      height: 180px;
+      background: linear-gradient(135deg, var(--blue-pale), var(--green-pale));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+    .news-small-img img { width:100%; height:100%; object-fit:cover; }
+    .news-small-body { padding: 20px; flex:1; }
+    .news-small-body .cat { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--blue); margin-bottom:6px; }
+    .news-small-body .cat.green { color:var(--green); }
+    .news-small-body .cat.red { color:var(--red); }
+    .news-small-body h3 { font-size:0.95rem; font-weight:700; margin-bottom:8px; color:var(--dark); line-height:1.4; }
+    .news-small-body p { font-size:0.83rem; color:var(--gray); margin-bottom:12px; }
+    .news-small-body .meta { font-size:0.75rem; color:var(--gray); }
+    .read-more { font-size:0.82rem; font-weight:700; color:var(--blue); display:inline-flex; align-items:center; gap:6px; margin-top:8px; }
+    .read-more:hover { color:var(--blue-light); }
+    .add-news-box {
+      border: 2px dashed #C5D5E8;
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      color: var(--gray);
+      background: var(--light-gray);
+    }
+    .add-news-box i { font-size: 2rem; color: #C5D5E8; margin-bottom: 12px; display: block; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-circle">A</div>
+    <div class="brand-text">
+      <div class="brand-main">KeRis-Dimas ATAH</div>
+      <div class="brand-sub">Universitas Jember</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+    <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+    <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+    <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+    <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+    <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="pengabdian.html"><span class="lang-id">Pengabdian</span><span class="lang-en">Service</span></a></li>
+    <li><a href="news.html" class="active"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+    <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+    <li><div class="lang-btn"><button id="btn-id" class="active">ID</button><button id="btn-en">EN</button></div></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span><span class="lang-id">Berita</span><span class="lang-en">News</span></span>
+    </div>
+    <h1><span class="lang-id">Berita & Kegiatan</span><span class="lang-en">News & Activities</span></h1>
+    <p><span class="lang-id">Update terbaru dari KeRis-Dimas ATAH Universitas Jember</span><span class="lang-en">Latest updates from KeRis-Dimas ATAH Universitas Jember</span></p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+
+    <!-- BERITA UTAMA -->
+    <div class="news-hero-card">
+      <div class="news-hero-img">🤖</div>
+      <div class="news-hero-body">
+        <div class="category">📌 <span class="lang-id">Berita Utama</span><span class="lang-en">Featured News</span></div>
+        <h2>
+          <span class="lang-id">KeRis ATAH Kembangkan Website Resmi untuk Publikasi Kelompok Riset</span>
+          <span class="lang-en">KeRis ATAH Launches Official Website for Research Group Publication</span>
+        </h2>
+        <p>
+          <span class="lang-id">Dalam rangka meningkatkan visibilitas dan memperkenalkan KeRis-Dimas ATAH kepada mitra industri, mahasiswa, dan masyarakat luas, kelompok riset ini kini memiliki website resmi bilingual (Indonesia-Inggris).</span>
+          <span class="lang-en">To improve visibility and introduce KeRis-Dimas ATAH to industry partners, students, and the general public, the research group now has an official bilingual website (Indonesian-English).</span>
+        </p>
+        <div class="meta">
+          <span><i class="fas fa-calendar"></i> 2024</span>
+          <span><i class="fas fa-tag"></i> <span class="lang-id">Pengumuman</span><span class="lang-en">Announcement</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID BERITA -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;">
+
+      <div class="news-small-card">
+        <div class="news-small-img">🏆</div>
+        <div class="news-small-body">
+          <div class="cat">🎓 <span class="lang-id">Publikasi</span><span class="lang-en">Publication</span></div>
+          <h3><span class="lang-id">Artikel KeRis ATAH Terindeks Scopus Q1 — Hydroponics & WSN</span><span class="lang-en">KeRis ATAH Article Indexed in Scopus Q1 — Hydroponics & WSN</span></h3>
+          <p><span class="lang-id">Artikel tentang pengukuran budidaya padi dengan sistem hidroganik menggunakan WSN berhasil terindeks di jurnal Measurement (Q1).</span><span class="lang-en">Article on paddy cultivation measurement with hydroganic system using WSN successfully indexed in Measurement journal (Q1).</span></p>
+          <div class="meta"><i class="fas fa-calendar"></i> 2021</div>
+          <a href="publications.html" class="read-more"><span class="lang-id">Lihat Publikasi</span><span class="lang-en">View Publication</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="news-small-card">
+        <div class="news-small-img" style="background:linear-gradient(135deg,var(--red-pale),#FFE0E0);">🦠</div>
+        <div class="news-small-body">
+          <div class="cat red">🚨 COVID-19</div>
+          <h3><span class="lang-id">KeRis ATAH Kembangkan 3 Produk Respons COVID-19</span><span class="lang-en">KeRis ATAH Develops 3 COVID-19 Response Products</span></h3>
+          <p><span class="lang-id">Pada 2020, KeRis ATAH merespons pandemi dengan mengembangkan Robot BOTANUV-19, Ventilator Darurat, dan Faceshield 3D yang didanai PNBP UNEJ.</span><span class="lang-en">In 2020, KeRis ATAH responded to the pandemic by developing BOTANUV-19 Robot, Emergency Ventilator, and 3D Faceshield funded by PNBP UNEJ.</span></p>
+          <div class="meta"><i class="fas fa-calendar"></i> 2020</div>
+          <a href="products.html" class="read-more"><span class="lang-id">Lihat Produk</span><span class="lang-en">View Products</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="news-small-card">
+        <div class="news-small-img" style="background:linear-gradient(135deg,var(--green-pale),#C8E6C9);">📖</div>
+        <div class="news-small-body">
+          <div class="cat green">📚 <span class="lang-id">Buku</span><span class="lang-en">Book</span></div>
+          <h3><span class="lang-id">Terbit: Buku "Sistem Kontrol Robot untuk Rehabilitasi"</span><span class="lang-en">Published: Book "Robot Control Systems for Rehabilitation"</span></h3>
+          <p><span class="lang-id">Buku karya Koordinator KeRis ATAH, Ir. Khairul Anam, Ph.D, diterbitkan oleh UPT Penerbitan Universitas Jember dengan ISBN 9786025617911.</span><span class="lang-en">Book by KeRis ATAH Coordinator, Ir. Khairul Anam, Ph.D, published by UPT Penerbitan Universitas Jember with ISBN 9786025617911.</span></p>
+          <div class="meta"><i class="fas fa-calendar"></i> 2019</div>
+          <a href="publications.html" class="read-more"><span class="lang-id">Lihat Publikasi</span><span class="lang-en">View Publications</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="news-small-card">
+        <div class="news-small-img">⚗️</div>
+        <div class="news-small-body">
+          <div class="cat">🔬 <span class="lang-id">Penelitian</span><span class="lang-en">Research</span></div>
+          <h3><span class="lang-id">Hibah IDB: Alat Enkapsulasi Sodium Alginate Raih Paten</span><span class="lang-en">IDB Grant: Sodium Alginate Encapsulation Device Patents Registered</span></h3>
+          <p><span class="lang-id">Penelitian alat enkapsulasi yang didanai Hibah IDB berhasil menghasilkan prototipe dan paten terdaftar sebagai luaran penelitian terapan.</span><span class="lang-en">Encapsulation device research funded by IDB Grant successfully produced a prototype and registered patent as applied research output.</span></p>
+          <div class="meta"><i class="fas fa-calendar"></i> 2019</div>
+          <a href="research.html" class="read-more"><span class="lang-id">Lihat Penelitian</span><span class="lang-en">View Research</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="news-small-card">
+        <div class="news-small-img" style="background:linear-gradient(135deg,#E8EAF6,var(--blue-pale));">🦾</div>
+        <div class="news-small-body">
+          <div class="cat">🏅 <span class="lang-id">Prestasi</span><span class="lang-en">Achievement</span></div>
+          <h3><span class="lang-id">DRPM Terapan Rp 238 Juta: Robot Tangan Stroke Capai Tahun Ketiga</span><span class="lang-en">DRPM Applied Rp 238 Million: Stroke Hand Robot Reaches Year Three</span></h3>
+          <p><span class="lang-id">Penelitian Robot Tangan untuk Penyandang Disabilitas Akibat Stroke berhasil mendapatkan pendanaan DRPM sebesar Rp 238 juta pada tahun ketiga.</span><span class="lang-en">Stroke Disability Hand Robot research secured DRPM funding of Rp 238 million in its third year.</span></p>
+          <div class="meta"><i class="fas fa-calendar"></i> 2019</div>
+          <a href="research.html" class="read-more"><span class="lang-id">Lihat Penelitian</span><span class="lang-en">View Research</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Slot tambah berita baru -->
+      <div class="add-news-box">
+        <i class="fas fa-plus-circle"></i>
+        <h4 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;">
+          <span class="lang-id">Tambahkan Berita Baru</span>
+          <span class="lang-en">Add New News</span>
+        </h4>
+        <p style="font-size:0.82rem;margin:0;">
+          <span class="lang-id">Salin blok <code>.news-small-card</code> di atas dan isi dengan konten terbaru. Lihat README.md untuk panduan lengkap.</span>
+          <span class="lang-en">Copy a <code>.news-small-card</code> block above and fill with latest content. See README.md for full guide.</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="name">KeRis-Dimas ATAH</div><div class="sub">Advanced Technology for Agriculture and Health</div></div>
+        <p><span class="lang-id">Kelompok Riset Universitas Jember.</span><span class="lang-en">Research Group of Universitas Jember.</span></p>
+        <div class="footer-socials" style="margin-top:16px;">
+          <a href="mailto:keristatah@gmail.com" class="footer-social-btn"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/kerisatah-unej" target="_blank" class="footer-social-btn"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Menu</h4><ul>
+        <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+        <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+        <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+        <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4><span class="lang-id">Lainnya</span><span class="lang-en">More</span></h4><ul>
+        <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+        <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kontak</h4><ul>
+        <li><a href="mailto:keristatah@gmail.com">keristatah@gmail.com</a></li>
+        <li><a href="https://unej.ac.id" target="_blank">Universitas Jember</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 KeRis-Dimas ATAH — Universitas Jember.</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+<script src="js/main.js"></script>
+</body>
+</html>

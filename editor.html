@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor Konten — KeRis-Dimas ATAH</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .editor-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .editor-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.75rem; }
+    .editor-tab { padding: 0.5rem 1.1rem; border-radius: 6px 6px 0 0; border: 1px solid #e0e0e0; border-bottom: none; background: #f5f5f5; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: #555; transition: all 0.2s; }
+    .editor-tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .editor-panel { display: none; }
+    .editor-panel.active { display: block; }
+    .editor-panel h2 { font-size: 1.4rem; margin-bottom: 0.4rem; color: var(--blue); }
+    .editor-panel .subtitle { color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.3rem; color: #333; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #ccc; border-radius: 6px;
+      font-family: Inter, sans-serif; font-size: 0.93rem; box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: var(--blue);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-generate { background: var(--blue); color: #fff; border: none; padding: 0.7rem 1.8rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s; margin-top: 0.5rem; }
+    .btn-generate:hover { background: #0d47a1; }
+    .btn-copy { background: var(--green); color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; float: right; transition: background 0.2s; }
+    .btn-copy:hover { background: #1b5e20; }
+    .btn-copy.copied { background: #555; }
+    .output-area { display: none; margin-top: 1.5rem; }
+    .output-area.show { display: block; }
+    .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    .output-header strong { font-size: 0.95rem; color: #333; }
+    .output-code { background: #1e1e2e; color: #cdd6f4; padding: 1rem; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.82rem; overflow-x: auto; white-space: pre; line-height: 1.6; max-height: 400px; overflow-y: auto; }
+    .step-box { background: #e3f2fd; border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin: 1.5rem 0; }
+    .step-box h4 { margin-bottom: 0.5rem; color: var(--blue); font-size: 0.95rem; }
+    .step-box ol, .step-box ul { margin: 0; padding-left: 1.3rem; font-size: 0.9rem; line-height: 1.8; }
+    .tip { background: #fff8e1; border-left: 4px solid #f9a825; padding: 0.8rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.88rem; margin-top: 1rem; }
+    .tip strong { color: #e65100; }
+    .section-divider { border: none; border-top: 1px solid #e0e0e0; margin: 2rem 0; }
+    @media(max-width:600px){ .form-row { grid-template-columns: 1fr; } .editor-tab { font-size: 0.8rem; padding: 0.4rem 0.7rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-icon"><i class="fas fa-dna"></i></div>
+      <div class="brand-text">
+        <span class="brand-main">KeRis-Dimas ATAH</span>
+        <span class="brand-sub">Universitas Jember</span>
+      </div>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a>
+      <a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a>
+      <a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a>
+      <a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a>
+      <a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a>
+      <a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a>
+      <a href="pengabdian.html"><span class="lang-id">Pengabdian</span><span class="lang-en">Service</span></a>
+      <a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a>
+      <a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a>
+      <a href="editor.html" class="active"><i class="fas fa-edit"></i> Editor</a>
+      <button class="lang-toggle" id="langToggle">
+        <span class="lang-id">EN</span><span class="lang-en">ID</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header" style="background: linear-gradient(135deg, #1565C0 0%, #2E7D32 100%);">
+  <div class="container">
+    <h1 class="page-title"><i class="fas fa-edit"></i> Editor Konten</h1>
+    <p class="page-subtitle">Generate HTML siap-paste untuk update website tanpa coding</p>
+  </div>
+</div>
+
+<div class="editor-wrap">
+
+  <div class="step-box">
+    <h4><i class="fas fa-info-circle"></i> Cara Pakai</h4>
+    <ol>
+      <li>Pilih tab konten yang ingin ditambahkan</li>
+      <li>Isi form — lalu klik <strong>Generate HTML</strong></li>
+      <li>Klik <strong>Salin Kode</strong> untuk menyalin hasilnya</li>
+      <li>Buka file yang dituju di <a href="https://github.com/kerisatah-unej/kerisatah-unej.github.io" target="_blank">GitHub</a> → klik ikon pensil ✏️ → paste kode → Commit</li>
+    </ol>
+  </div>
+
+  <!-- TABS -->
+  <div class="editor-tabs">
+    <button class="editor-tab active" onclick="switchTab('berita', this)"><i class="fas fa-newspaper"></i> Berita</button>
+    <button class="editor-tab" onclick="switchTab('publikasi', this)"><i class="fas fa-book"></i> Publikasi</button>
+    <button class="editor-tab" onclick="switchTab('penelitian', this)"><i class="fas fa-flask"></i> Penelitian</button>
+    <button class="editor-tab" onclick="switchTab('pengabdian', this)"><i class="fas fa-hands-helping"></i> Pengabdian</button>
+    <button class="editor-tab" onclick="switchTab('produk', this)"><i class="fas fa-microchip"></i> Produk</button>
+    <button class="editor-tab" onclick="switchTab('tim', this)"><i class="fas fa-users"></i> Anggota Tim</button>
+  </div>
+
+  <!-- ===================== BERITA ===================== -->
+  <div id="panel-berita" class="editor-panel active">
+    <h2><i class="fas fa-newspaper"></i> Tambah Berita Baru</h2>
+    <p class="subtitle">Generate kartu berita untuk ditempel di <code>news.html</code> — cari komentar <code>&lt;!-- NEWS CARDS --&gt;</code> atau sebelum div <code>add-news-box</code></p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Judul Berita (Indonesia)</label>
+        <input type="text" id="b-judul-id" placeholder="Publikasi Baru di Jurnal Scopus Q1">
+      </div>
+      <div class="form-group">
+        <label>Judul Berita (English)</label>
+        <input type="text" id="b-judul-en" placeholder="New Publication in Scopus Q1 Journal">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deskripsi Singkat (Indonesia)</label>
+        <textarea id="b-desc-id" placeholder="Anggota KeRis berhasil mempublikasikan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi Singkat (English)</label>
+        <textarea id="b-desc-en" placeholder="KeRis member published..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="b-cat">
+          <option value="🔬 Penelitian">🔬 Penelitian (Research)</option>
+          <option value="🏆 Prestasi">🏆 Prestasi (Achievement)</option>
+          <option value="🤝 Pengabdian">🤝 Pengabdian (Community Service)</option>
+          <option value="📢 Pengumuman">📢 Pengumuman (Announcement)</option>
+          <option value="🎓 Pendidikan">🎓 Pendidikan (Education)</option>
+          <option value="💡 Produk">💡 Produk (Product)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tanggal/Bulan Tahun</label>
+        <input type="text" id="b-tanggal" placeholder="Mei 2025">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Foto (nama file di assets/images/) — opsional</label>
+        <input type="text" id="b-foto" placeholder="berita-publikasi-2025.jpg">
+      </div>
+      <div class="form-group">
+        <label>Emoji (jika tidak ada foto)</label>
+        <input type="text" id="b-emoji" value="📰" placeholder="📰">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Link "Selengkapnya" (URL atau halaman)</label>
+      <input type="text" id="b-link" placeholder="publications.html atau https://...">
+    </div>
+    <button class="btn-generate" onclick="generateBerita()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-berita" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>news.html</code> — sebelum <code>&lt;!-- ADD NEWS --&gt;</code></strong>
+        <button class="btn-copy" onclick="copyCode('code-berita', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-berita"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PUBLIKASI ===================== -->
+  <div id="panel-publikasi" class="editor-panel">
+    <h2><i class="fas fa-book"></i> Tambah Publikasi Ilmiah</h2>
+    <p class="subtitle">Generate kartu publikasi untuk ditempel di <code>publications.html</code> — cari komentar <code>&lt;!-- Publication List --&gt;</code></p>
+    <div class="form-group">
+      <label>Judul Artikel</label>
+      <input type="text" id="p-judul" placeholder="Deep Learning for EMG Signal Classification in Stroke Rehabilitation">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Jurnal / Penerbit</label>
+        <input type="text" id="p-jurnal" placeholder="Neural Networks · Elsevier">
+      </div>
+      <div class="form-group">
+        <label>Penulis</label>
+        <input type="text" id="p-penulis" placeholder="K. Anam, A. Al-Jumaily">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tahun</label>
+        <input type="number" id="p-tahun" placeholder="2025" min="2000" max="2030">
+      </div>
+      <div class="form-group">
+        <label>Jumlah Sitasi</label>
+        <input type="number" id="p-sitasi" placeholder="5" min="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Indeks</label>
+        <select id="p-indeks">
+          <option value="scopus">Scopus</option>
+          <option value="wos">WoS</option>
+          <option value="sinta">SINTA</option>
+          <option value="book">Buku</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Kuartil</label>
+        <select id="p-quartil">
+          <option value="q1">Q1</option>
+          <option value="q2">Q2</option>
+          <option value="q3">Q3</option>
+          <option value="q4">Q4</option>
+          <option value="">— (Tidak ada)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Anggota (untuk filter, lowercase, tanpa spasi)</label>
+        <input type="text" id="p-anggota" placeholder="khairul sumardi wahyu">
+      </div>
+      <div class="form-group">
+        <label>DOI / Link Artikel (opsional)</label>
+        <input type="text" id="p-doi" placeholder="https://doi.org/10.xxxx/...">
+      </div>
+    </div>
+    <button class="btn-generate" onclick="generatePublikasi()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-publikasi" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>publications.html</code> — di dalam <code>&lt;div id="pub-list"&gt;</code></strong>
+        <button class="btn-copy" onclick="copyCode('code-publikasi', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-publikasi"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PENELITIAN ===================== -->
+  <div id="panel-penelitian" class="editor-panel">
+    <h2><i class="fas fa-flask"></i> Tambah Proyek Penelitian</h2>
+    <p class="subtitle">Generate kartu proyek untuk ditempel di <code>research.html</code> — cari komentar <code>&lt;!-- Research Projects --&gt;</code></p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Judul Penelitian (Indonesia)</label>
+        <input type="text" id="r-judul-id" placeholder="Pengembangan Robot Tangan untuk Terapi Stroke">
+      </div>
+      <div class="form-group">
+        <label>Judul Penelitian (English)</label>
+        <input type="text" id="r-judul-en" placeholder="Hand Robot Development for Stroke Therapy">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deskripsi (Indonesia)</label>
+        <textarea id="r-desc-id" placeholder="Penelitian ini bertujuan untuk..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi (English)</label>
+        <textarea id="r-desc-en" placeholder="This research aims to..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Sumber Dana</label>
+        <input type="text" id="r-dana" placeholder="DRPM Dikti, Kemendikbud">
+      </div>
+      <div class="form-group">
+        <label>Besaran Dana (opsional)</label>
+        <input type="text" id="r-nominal" placeholder="Rp 238.000.000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tahun Mulai</label>
+        <input type="number" id="r-tahun-mulai" placeholder="2024">
+      </div>
+      <div class="form-group">
+        <label>Tahun Selesai (atau "Sekarang")</label>
+        <input type="text" id="r-tahun-selesai" placeholder="2025">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Bidang</label>
+      <select id="r-bidang">
+        <option value="health">🏥 Kesehatan (Health)</option>
+        <option value="agri">🌾 Pertanian (Agriculture)</option>
+        <option value="covid">🦠 COVID-19 / Pandemi</option>
+        <option value="ai">🤖 AI & Robotika</option>
+      </select>
+    </div>
+    <button class="btn-generate" onclick="generatePenelitian()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-penelitian" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>research.html</code></strong>
+        <button class="btn-copy" onclick="copyCode('code-penelitian', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-penelitian"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PENGABDIAN ===================== -->
+  <div id="panel-pengabdian" class="editor-panel">
+    <h2><i class="fas fa-hands-helping"></i> Tambah Kegiatan Pengabdian</h2>
+    <p class="subtitle">Generate kartu kegiatan untuk ditempel di <code>pengabdian.html</code> — cari komentar <code>&lt;!-- Activity Cards --&gt;</code></p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Judul Kegiatan (Indonesia)</label>
+        <input type="text" id="pg-judul-id" placeholder="Pelatihan Robot Sterilisasi untuk RS">
+      </div>
+      <div class="form-group">
+        <label>Judul Kegiatan (English)</label>
+        <input type="text" id="pg-judul-en" placeholder="Sterilization Robot Training for Hospitals">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deskripsi (Indonesia)</label>
+        <textarea id="pg-desc-id" placeholder="Kegiatan pelatihan yang melibatkan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi (English)</label>
+        <textarea id="pg-desc-en" placeholder="Training activity involving..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Lokasi / Mitra</label>
+        <input type="text" id="pg-lokasi" placeholder="RSUD dr. Soebandi Jember">
+      </div>
+      <div class="form-group">
+        <label>Tahun</label>
+        <input type="text" id="pg-tahun" placeholder="2025">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Jumlah Peserta</label>
+        <input type="text" id="pg-peserta" placeholder="30 peserta">
+      </div>
+      <div class="form-group">
+        <label>Emoji / Ikon</label>
+        <input type="text" id="pg-emoji" value="🤝" placeholder="🤝">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Link Video YouTube (opsional — pakai ID atau URL penuh)</label>
+      <input type="text" id="pg-video" placeholder="https://www.youtube.com/watch?v=qK3OgOzMzBs">
+    </div>
+    <button class="btn-generate" onclick="generatePengabdian()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-pengabdian" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>pengabdian.html</code> — di dalam grid aktivitas</strong>
+        <button class="btn-copy" onclick="copyCode('code-pengabdian', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-pengabdian"></div>
+    </div>
+  </div>
+
+  <!-- ===================== PRODUK ===================== -->
+  <div id="panel-produk" class="editor-panel">
+    <h2><i class="fas fa-microchip"></i> Tambah Produk / Prototipe</h2>
+    <p class="subtitle">Generate kartu produk untuk ditempel di <code>products.html</code> — cari <code>&lt;div id="products-grid"&gt;</code></p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Produk (Indonesia)</label>
+        <input type="text" id="pr-nama-id" placeholder="Robot Tangan untuk Terapi Stroke">
+      </div>
+      <div class="form-group">
+        <label>Nama Produk (English)</label>
+        <input type="text" id="pr-nama-en" placeholder="Hand Robot for Stroke Therapy">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deskripsi Singkat (Indonesia)</label>
+        <textarea id="pr-desc-id" placeholder="Prototipe robot berbasis EMG untuk..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi Singkat (English)</label>
+        <textarea id="pr-desc-en" placeholder="EMG-based robot prototype for..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="pr-cat">
+          <option value="health">🏥 Kesehatan (Health)</option>
+          <option value="agri">🌾 Pertanian (Agriculture)</option>
+          <option value="covid">🦠 COVID-19</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Nama File Foto (di assets/images/)</label>
+        <input type="text" id="pr-foto" placeholder="robot-tangan.jpg">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Emoji Fallback (jika foto tidak ada)</label>
+      <input type="text" id="pr-emoji" value="🤖" placeholder="🤖">
+    </div>
+    <button class="btn-generate" onclick="generateProduk()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-produk" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>products.html</code> — di dalam <code>&lt;div id="products-grid"&gt;</code></strong>
+        <button class="btn-copy" onclick="copyCode('code-produk', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-produk"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TIM ===================== -->
+  <div id="panel-tim" class="editor-panel">
+    <h2><i class="fas fa-users"></i> Tambah Anggota Tim</h2>
+    <p class="subtitle">Generate kartu anggota untuk ditempel di <code>team.html</code> — cari bagian divisi yang sesuai</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="t-nama" placeholder="Dr. Ir. Nama Lengkap, M.T.">
+      </div>
+      <div class="form-group">
+        <label>Jabatan / Peran (Indonesia)</label>
+        <input type="text" id="t-jabatan-id" placeholder="Anggota Peneliti, Divisi Alkes">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Jabatan / Peran (English)</label>
+        <input type="text" id="t-jabatan-en" placeholder="Research Member, Medical Device Division">
+      </div>
+      <div class="form-group">
+        <label>Program Studi / Departemen</label>
+        <input type="text" id="t-prodi" placeholder="Teknik Elektro, UNEJ">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Keahlian (pisah koma)</label>
+        <input type="text" id="t-keahlian" placeholder="Signal Processing, Machine Learning, Robotika">
+      </div>
+      <div class="form-group">
+        <label>Nama File Foto (di assets/images/)</label>
+        <input type="text" id="t-foto" placeholder="nama-anggota.jpg">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>ID SINTA (angka saja)</label>
+        <input type="text" id="t-sinta" placeholder="6062588">
+      </div>
+      <div class="form-group">
+        <label>Link Website/Scholar (opsional)</label>
+        <input type="text" id="t-web" placeholder="https://scholar.google.com/...">
+      </div>
+    </div>
+    <button class="btn-generate" onclick="generateTim()"><i class="fas fa-code"></i> Generate HTML</button>
+
+    <div id="out-tim" class="output-area">
+      <div class="output-header">
+        <strong>Paste ke: <code>team.html</code> — di dalam grid divisi yang sesuai</strong>
+        <button class="btn-copy" onclick="copyCode('code-tim', this)">Salin Kode</button>
+      </div>
+      <div class="output-code" id="code-tim"></div>
+    </div>
+    <div class="tip">
+      <strong>Tip Foto:</strong> Simpan foto di <code>assets/images/</code> dengan nama sesuai yang diisi di atas (contoh: <code>nama-anggota.jpg</code>). Ukuran ideal 300×300 px. Jika tidak ada foto, inisial nama akan tampil otomatis.
+    </div>
+  </div>
+
+</div><!-- /editor-wrap -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <i class="fas fa-dna"></i>
+          <span>KeRis-Dimas ATAH</span>
+        </div>
+        <p style="color:#aaa;font-size:0.9rem;">Advanced Technology for Agriculture and Health<br>Universitas Jember</p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Navigasi</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="about.html">Tentang</a></li>
+          <li><a href="research.html">Penelitian</a></li>
+          <li><a href="publications.html">Publikasi</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Konten</h4>
+        <ul class="footer-links">
+          <li><a href="products.html">Produk</a></li>
+          <li><a href="pengabdian.html">Pengabdian</a></li>
+          <li><a href="news.html">Berita</a></li>
+          <li><a href="contact.html">Kontak</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Kontak</h4>
+        <ul class="footer-links">
+          <li><i class="fas fa-envelope"></i> keristatah@gmail.com</li>
+          <li><i class="fab fa-github"></i> github.com/kerisatah-unej</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 KeRis-Dimas ATAH — Universitas Jember</p>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="js/main.js"></script>
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.editor-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showOutput(outId, codeId, html) {
+  const out = document.getElementById(outId);
+  document.getElementById(codeId).textContent = html;
+  out.classList.add('show');
+  out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyCode(codeId, btn) {
+  const text = document.getElementById(codeId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Tersalin!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Salin Kode'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function getYoutubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : (url.length === 11 ? url : null);
+}
+
+/* ---- GENERATORS ---- */
+
+function generateBerita() {
+  const judulId = document.getElementById('b-judul-id').value.trim();
+  const judulEn = document.getElementById('b-judul-en').value.trim();
+  const descId  = document.getElementById('b-desc-id').value.trim();
+  const descEn  = document.getElementById('b-desc-en').value.trim();
+  const cat     = document.getElementById('b-cat').value;
+  const tgl     = document.getElementById('b-tanggal').value.trim() || 'Mei 2025';
+  const foto    = document.getElementById('b-foto').value.trim();
+  const emoji   = document.getElementById('b-emoji').value.trim() || '📰';
+  const link    = document.getElementById('b-link').value.trim() || '#';
+
+  const imgBlock = foto
+    ? `<div class="news-small-img">\n      <img src="assets/images/${escHtml(foto)}" alt="${escHtml(judulId)}">\n    </div>`
+    : `<div class="news-small-img">${emoji}</div>`;
+
+  const html = `<div class="news-small-card">
+  ${imgBlock}
+  <div class="news-small-body">
+    <div class="cat">${escHtml(cat)}</div>
+    <h3>
+      <span class="lang-id">${escHtml(judulId)}</span>
+      <span class="lang-en">${escHtml(judulEn)}</span>
+    </h3>
+    <p>
+      <span class="lang-id">${escHtml(descId)}</span>
+      <span class="lang-en">${escHtml(descEn)}</span>
+    </p>
+    <div class="meta"><i class="fas fa-calendar"></i> ${escHtml(tgl)}</div>
+    <a href="${escHtml(link)}" class="read-more">
+      <span class="lang-id">Selengkapnya</span>
+      <span class="lang-en">Read More</span>
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</div>`;
+  showOutput('out-berita', 'code-berita', html);
+}
+
+function generatePublikasi() {
+  const judul   = document.getElementById('p-judul').value.trim();
+  const jurnal  = document.getElementById('p-jurnal').value.trim();
+  const penulis = document.getElementById('p-penulis').value.trim();
+  const tahun   = document.getElementById('p-tahun').value.trim();
+  const sitasi  = document.getElementById('p-sitasi').value.trim();
+  const indeks  = document.getElementById('p-indeks').value;
+  const q       = document.getElementById('p-quartil').value;
+  const anggota = document.getElementById('p-anggota').value.trim();
+  const doi     = document.getElementById('p-doi').value.trim();
+
+  const tags = [indeks, q, anggota, tahun].filter(Boolean).join(' ');
+  const cardClass = q ? `pub-card ${q}` : 'pub-card';
+
+  const badgeIndeks = `<span class="pub-badge badge-${indeks}">${indeks.toUpperCase()}</span>`;
+  const badgeQ = q ? `\n      <span class="pub-badge badge-${q}">${q.toUpperCase()}</span>` : '';
+  const titleEl = doi
+    ? `<h4><a href="${escHtml(doi)}" target="_blank">${escHtml(judul)}</a></h4>`
+    : `<h4>${escHtml(judul)}</h4>`;
+  const sitasiText = sitasi ? ` · ${sitasi} sitasi` : '';
+
+  const html = `<div class="${cardClass}" data-tags="${escHtml(tags)}">
+  <div class="pub-meta">
+    ${badgeIndeks}${badgeQ}
+    <span class="pub-year">${escHtml(tahun)}</span>
+  </div>
+  ${titleEl}
+  <div class="pub-journal">${escHtml(jurnal)} · ${escHtml(penulis)}${sitasiText}</div>
+</div>`;
+  showOutput('out-publikasi', 'code-publikasi', html);
+}
+
+function generatePenelitian() {
+  const judulId   = document.getElementById('r-judul-id').value.trim();
+  const judulEn   = document.getElementById('r-judul-en').value.trim();
+  const descId    = document.getElementById('r-desc-id').value.trim();
+  const descEn    = document.getElementById('r-desc-en').value.trim();
+  const dana      = document.getElementById('r-dana').value.trim();
+  const nominal   = document.getElementById('r-nominal').value.trim();
+  const tahunMul  = document.getElementById('r-tahun-mulai').value.trim();
+  const tahunSel  = document.getElementById('r-tahun-selesai').value.trim();
+  const bidang    = document.getElementById('r-bidang').value;
+
+  const bidangMap = { health:'🏥 Kesehatan', agri:'🌾 Pertanian', covid:'🦠 COVID-19', ai:'🤖 AI & Robotika' };
+  const icon = bidangMap[bidang] || '🔬 Penelitian';
+  const nominalLine = nominal ? `\n    <p class="lang-id-block"><strong>Dana:</strong> ${escHtml(nominal)} — ${escHtml(dana)}</p>\n    <p class="lang-en-block"><strong>Grant:</strong> ${escHtml(nominal)} — ${escHtml(dana)}</p>` : '';
+
+  const html = `<div class="research-card" data-cat="${bidang}">
+  <div class="research-icon">${icon}</div>
+  <div class="research-body">
+    <h3>
+      <span class="lang-id">${escHtml(judulId)}</span>
+      <span class="lang-en">${escHtml(judulEn)}</span>
+    </h3>
+    <p class="lang-id-block">${escHtml(descId)}</p>
+    <p class="lang-en-block">${escHtml(descEn)}</p>${nominalLine}
+    <div class="research-meta">
+      <span><i class="fas fa-calendar"></i> ${escHtml(tahunMul)}–${escHtml(tahunSel)}</span>
+    </div>
+  </div>
+</div>`;
+  showOutput('out-penelitian', 'code-penelitian', html);
+}
+
+function generatePengabdian() {
+  const judulId  = document.getElementById('pg-judul-id').value.trim();
+  const judulEn  = document.getElementById('pg-judul-en').value.trim();
+  const descId   = document.getElementById('pg-desc-id').value.trim();
+  const descEn   = document.getElementById('pg-desc-en').value.trim();
+  const lokasi   = document.getElementById('pg-lokasi').value.trim();
+  const tahun    = document.getElementById('pg-tahun').value.trim();
+  const peserta  = document.getElementById('pg-peserta').value.trim();
+  const emoji    = document.getElementById('pg-emoji').value.trim() || '🤝';
+  const video    = document.getElementById('pg-video').value.trim();
+
+  const vidId = getYoutubeId(video);
+  const videoBlock = vidId ? `
+  <div class="activity-video">
+    <iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+  </div>` : '';
+
+  const html = `<div class="activity-card">
+  <div class="activity-icon">${emoji}</div>
+  <div class="activity-body">
+    <h3>
+      <span class="lang-id">${escHtml(judulId)}</span>
+      <span class="lang-en">${escHtml(judulEn)}</span>
+    </h3>
+    <p class="lang-id-block">${escHtml(descId)}</p>
+    <p class="lang-en-block">${escHtml(descEn)}</p>
+    <div class="activity-meta">
+      <span><i class="fas fa-map-marker-alt"></i> ${escHtml(lokasi)}</span>
+      <span><i class="fas fa-calendar"></i> ${escHtml(tahun)}</span>
+      <span><i class="fas fa-users"></i> ${escHtml(peserta)}</span>
+    </div>
+  </div>${videoBlock}
+</div>`;
+  showOutput('out-pengabdian', 'code-pengabdian', html);
+}
+
+function generateProduk() {
+  const namaId  = document.getElementById('pr-nama-id').value.trim();
+  const namaEn  = document.getElementById('pr-nama-en').value.trim();
+  const descId  = document.getElementById('pr-desc-id').value.trim();
+  const descEn  = document.getElementById('pr-desc-en').value.trim();
+  const cat     = document.getElementById('pr-cat').value;
+  const foto    = document.getElementById('pr-foto').value.trim();
+  const emoji   = document.getElementById('pr-emoji').value.trim() || '🤖';
+
+  const catMap = { health:'pt-health', agri:'pt-agri', covid:'pt-covid' };
+  const catLabelId = { health:'🏥 Kesehatan', agri:'🌾 Pertanian', covid:'🦠 COVID-19' };
+  const catLabelEn = { health:'🏥 Health', agri:'🌾 Agriculture', covid:'🦠 COVID-19' };
+  const tagClass = catMap[cat];
+
+  const html = `<div class="product-card" data-cat="${cat}">
+  <div class="product-img">
+    <img src="assets/images/${escHtml(foto)}" alt="${escHtml(namaId)}"
+         onerror="this.parentElement.innerHTML='${emoji}';">
+  </div>
+  <div class="product-body">
+    <span class="product-tag ${tagClass}">
+      <span class="lang-id">${catLabelId[cat]}</span>
+      <span class="lang-en">${catLabelEn[cat]}</span>
+    </span>
+    <h3>
+      <span class="lang-id">${escHtml(namaId)}</span>
+      <span class="lang-en">${escHtml(namaEn)}</span>
+    </h3>
+    <p>
+      <span class="lang-id">${escHtml(descId)}</span>
+      <span class="lang-en">${escHtml(descEn)}</span>
+    </p>
+  </div>
+</div>`;
+  showOutput('out-produk', 'code-produk', html);
+}
+
+function generateTim() {
+  const nama      = document.getElementById('t-nama').value.trim();
+  const jabatanId = document.getElementById('t-jabatan-id').value.trim();
+  const jabatanEn = document.getElementById('t-jabatan-en').value.trim();
+  const prodi     = document.getElementById('t-prodi').value.trim();
+  const keahlian  = document.getElementById('t-keahlian').value.trim();
+  const foto      = document.getElementById('t-foto').value.trim();
+  const sinta     = document.getElementById('t-sinta').value.trim();
+  const web       = document.getElementById('t-web').value.trim();
+
+  // initials from name
+  const initials = nama.split(' ').filter(w => /^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join('') || nama.substring(0,2).toUpperCase();
+
+  const keahlianTags = keahlian.split(',').map(k => k.trim()).filter(Boolean)
+    .map(k => `<span class="tag">${escHtml(k)}</span>`).join('\n      ');
+
+  const sintaLink = sinta ? `\n      <a href="https://sinta.kemdikbud.go.id/authors/profile/${sinta}" target="_blank" class="btn-sm btn-outline">SINTA</a>` : '';
+  const webLink   = web   ? `\n      <a href="${escHtml(web)}" target="_blank" class="btn-sm btn-outline">Website</a>` : '';
+
+  const html = `<div class="team-card">
+  <div class="team-avatar">
+    <img src="assets/images/${escHtml(foto)}" alt="${escHtml(nama)}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+    <div class="avatar-placeholder" style="display:none">${initials}</div>
+  </div>
+  <div class="team-body">
+    <h3 class="team-name">${escHtml(nama)}</h3>
+    <p class="team-role">
+      <span class="lang-id">${escHtml(jabatanId)}</span>
+      <span class="lang-en">${escHtml(jabatanEn)}</span>
+    </p>
+    <p class="team-dept">${escHtml(prodi)}</p>
+    <div class="team-tags">
+      ${keahlianTags}
+    </div>
+    <div class="team-links">${sintaLink}${webLink}
+    </div>
+  </div>
+</div>`;
+  showOutput('out-tim', 'code-tim', html);
+}
+</script>
+</body>
+</html>

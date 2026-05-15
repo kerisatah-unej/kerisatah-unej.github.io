@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produk & Galeri — KeRis-Dimas ATAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .product-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; transition:var(--transition); }
+    .product-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,0.14); }
+    .product-img {
+      width:100%; height:240px; object-fit:cover;
+      background:var(--light-gray);
+      display:flex; align-items:center; justify-content:center;
+      font-size:4rem; color:var(--gray);
+    }
+    .product-img img { width:100%; height:100%; object-fit:cover; }
+    .product-body { padding:22px; }
+    .product-body h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .product-body p { font-size:0.85rem; color:var(--gray); margin-bottom:12px; }
+    .product-tag { display:inline-block; padding:3px 12px; border-radius:10px; font-size:0.72rem; font-weight:700; margin-bottom:10px; }
+    .pt-health { background:var(--blue-pale); color:var(--blue); }
+    .pt-agri { background:var(--green-pale); color:var(--green); }
+    .pt-covid { background:var(--red-pale); color:var(--red); }
+    .video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:24px; }
+    .video-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+    .video-embed { position:relative; padding-top:56.25%; background:#000; }
+    .video-embed iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .video-placeholder { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,var(--dark),#1565C0); display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; gap:12px; cursor:pointer; }
+    .video-placeholder i { font-size:3rem; opacity:0.8; }
+    .video-placeholder p { font-size:0.85rem; opacity:0.7; margin:0; }
+    .video-body { padding:18px; }
+    .video-body h3 { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+    .video-body p { font-size:0.82rem; color:var(--gray); margin:0; }
+    .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+    .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+    .filter-btn { padding:7px 18px; border-radius:30px; border:2px solid #E0E0E0; background:white; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--gray); }
+    .filter-btn.active, .filter-btn:hover { border-color:var(--blue); background:var(--blue); color:white; }
+    .product-card.hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-circle">A</div>
+    <div class="brand-text">
+      <div class="brand-main">KeRis-Dimas ATAH</div>
+      <div class="brand-sub">Universitas Jember</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+    <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+    <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+    <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+    <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+    <li><a href="products.html" class="active"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="pengabdian.html"><span class="lang-id">Pengabdian</span><span class="lang-en">Service</span></a></li>
+    <li><a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+    <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+    <li><div class="lang-btn"><button id="btn-id" class="active">ID</button><button id="btn-en">EN</button></div></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span><span class="lang-id">Produk & Galeri</span><span class="lang-en">Products & Gallery</span></span>
+    </div>
+    <h1><span class="lang-id">Produk & Prototipe</span><span class="lang-en">Products & Prototypes</span></h1>
+    <p><span class="lang-id">Inovasi nyata yang telah dihasilkan KeRis-Dimas ATAH</span><span class="lang-en">Real innovations produced by KeRis-Dimas ATAH</span></p>
+  </div>
+</div>
+
+<!-- PRODUK -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-blue"><span class="lang-id">Prototipe & Produk</span><span class="lang-en">Prototypes & Products</span></span>
+      <h2><span class="lang-id">Inovasi yang Telah Dihasilkan</span><span class="lang-en">Innovations Produced</span></h2>
+      <div class="section-divider divider-blue"></div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all"><span class="lang-id">Semua</span><span class="lang-en">All</span></button>
+      <button class="filter-btn" data-filter="health">🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span></button>
+      <button class="filter-btn" data-filter="agri">🌾 <span class="lang-id">Pertanian</span><span class="lang-en">Agriculture</span></button>
+      <button class="filter-btn" data-filter="covid">🦠 COVID-19</button>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+
+      <!-- Robot Tangan Stroke -->
+      <div class="product-card" data-cat="health">
+        <div class="product-img">
+          <img src="assets/images/robot-tangan.jpg" alt="Robot Tangan Terapi Stroke"
+               onerror="this.parentElement.innerHTML='🦾';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-health">🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span></span>
+          <h3><span class="lang-id">Robot Tangan untuk Terapi Stroke</span><span class="lang-en">Stroke Therapy Hand Robot</span></h3>
+          <p><span class="lang-id">Robot rehabilitasi tangan berbasis sinyal myoelectric (EMG) untuk pasien pasca serangan stroke. Dikembangkan dari 2018, telah menghasilkan paten dan publikasi Q2.</span><span class="lang-en">Hand rehabilitation robot based on myoelectric (EMG) signals for post-stroke patients. Developed since 2018, resulting in patents and Q2 publications.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">EMG</span>
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Deep Learning</span>
+            <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Paten</span><span class="lang-en">Patent</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Wheelchair -->
+      <div class="product-card" data-cat="health">
+        <div class="product-img">
+          <img src="assets/images/smart-wheelchair.jpg" alt="Smart Wheelchair"
+               onerror="this.parentElement.innerHTML='♿';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-health">🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span></span>
+          <h3>Smart Wheelchair</h3>
+          <p><span class="lang-id">Kursi roda elektrik cerdas dengan kontrol berbasis CNN dan EEG untuk pasien penyandang cacat fisik. Sistem navigasi otomatis indoor.</span><span class="lang-en">Intelligent electric wheelchair with CNN and EEG-based control for physically disabled patients. Automatic indoor navigation system.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">CNN</span>
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">EEG</span>
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Raspberry Pi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lampu Cerdas Ruang Operasi -->
+      <div class="product-card" data-cat="health">
+        <div class="product-img">
+          <img src="assets/images/smart-lamp.jpg" alt="Lampu Cerdas Ruang Operasi"
+               onerror="this.parentElement.innerHTML='💡';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-health">🏥 <span class="lang-id">Kesehatan</span><span class="lang-en">Health</span></span>
+          <h3><span class="lang-id">Smart Lighting Ruang Operasi</span><span class="lang-en">Smart OR Lighting</span></h3>
+          <p><span class="lang-id">Lampu cerdas untuk mendukung kinerja paramedis di ruang operasi rumah sakit. Prototipe telah diuji di lingkungan rumah sakit.</span><span class="lang-en">Smart lighting to support paramedic performance in hospital operating rooms. Prototype tested in hospital environments.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;"><span class="lang-id">Prototipe</span><span class="lang-en">Prototype</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Robot Sterilisasi BOTANUV -->
+      <div class="product-card" data-cat="health covid">
+        <div class="product-img">
+          <img src="assets/images/botanuv.jpg" alt="Robot BOTANUV-19"
+               onerror="this.parentElement.innerHTML='🤖';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-covid">🦠 COVID-19</span>
+          <h3>Robot Desinfektan BOTANUV-19</h3>
+          <p><span class="lang-id">Robot desinfektan berbasis UV untuk sterilisasi ruang isolasi pasien COVID-19. Dikembangkan 2020 sebagai respons cepat pandemi.</span><span class="lang-en">UV-based disinfectant robot for sterilizing COVID-19 patient isolation rooms. Developed in 2020 as a rapid pandemic response.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">UV Robot</span>
+            <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">PNBP UNEJ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ventilator -->
+      <div class="product-card" data-cat="health covid">
+        <div class="product-img">
+          <img src="assets/images/ventilator.jpg" alt="Ventilator COVID-19"
+               onerror="this.parentElement.innerHTML='🫁';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-covid">🦠 COVID-19</span>
+          <h3><span class="lang-id">Ventilator Pasien COVID-19</span><span class="lang-en">COVID-19 Patient Ventilator</span></h3>
+          <p><span class="lang-id">Prototipe ventilator darurat untuk penanganan pasien COVID-19 yang dikembangkan pada 2020 sebagai solusi kebutuhan alat kesehatan pandemi.</span><span class="lang-en">Emergency ventilator prototype for COVID-19 patients developed in 2020 as a solution to pandemic health equipment needs.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;"><span class="lang-id">Prototipe Darurat</span><span class="lang-en">Emergency Prototype</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Faceshield -->
+      <div class="product-card" data-cat="health covid">
+        <div class="product-img">
+          <img src="assets/images/faceshield.jpg" alt="Faceshield 3D"
+               onerror="this.parentElement.innerHTML='🛡️';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-covid">🦠 COVID-19</span>
+          <h3><span class="lang-id">Faceshield Printer 3D</span><span class="lang-en">3D Printed Faceshield</span></h3>
+          <p><span class="lang-id">Alat pelindung diri (APD) faceshield berbasis printer 3D sebagai upaya pencegahan penyebaran SARS-CoV-2 bagi tenaga medis.</span><span class="lang-en">3D printer-based faceshield PPE to prevent the spread of SARS-CoV-2 for medical personnel.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">3D Printing</span>
+            <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Produk</span><span class="lang-en">Product</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alat Enkapsulasi -->
+      <div class="product-card" data-cat="agri">
+        <div class="product-img">
+          <img src="assets/images/enkapsulasi.jpg" alt="Alat Enkapsulasi"
+               onerror="this.parentElement.innerHTML='⚗️';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-agri">🌾 <span class="lang-id">Pertanian</span><span class="lang-en">Agriculture</span></span>
+          <h3><span class="lang-id">Alat Enkapsulasi Sodium Alginate</span><span class="lang-en">Sodium Alginate Encapsulation Device</span></h3>
+          <p><span class="lang-id">Prototipe alat enkapsulasi berbasis Sodium Alginate dengan sistem kontrol otomatis dan berstandar untuk produksi massal. Didanai Hibah IDB.</span><span class="lang-en">Sodium Alginate-based encapsulation device prototype with standardized automatic control system for mass production. Funded by IDB Grant.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;">Hibah IDB</span>
+            <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Paten</span><span class="lang-en">Patent</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Holonomic Robot -->
+      <div class="product-card" data-cat="agri health">
+        <div class="product-img">
+          <img src="assets/images/holonomic-robot.jpg" alt="Robot Holonomik"
+               onerror="this.parentElement.innerHTML='🚗';">
+        </div>
+        <div class="product-body">
+          <span class="product-tag pt-agri">🤖 <span class="lang-id">Robotika</span><span class="lang-en">Robotics</span></span>
+          <h3><span class="lang-id">Robot Beroda Holonomik</span><span class="lang-en">Holonomic Wheeled Robot</span></h3>
+          <p><span class="lang-id">Robot beroda holonomik dengan sistem lane tracking berbasis pengolahan citra. Dapat diaplikasikan untuk navigasi di lahan pertanian maupun indoor.</span><span class="lang-en">Holonomic wheeled robot with image processing-based lane tracking. Applicable for navigation in agricultural fields and indoors.</span></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;"><span class="lang-id">Pengolahan Citra</span><span class="lang-en">Image Processing</span></span>
+            <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Sinta 2</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end products-grid -->
+
+    <!-- Add photo note -->
+    <div style="background:var(--green-pale);border-radius:12px;padding:20px 24px;margin-top:32px;display:flex;gap:12px;align-items:flex-start;">
+      <i class="fas fa-camera" style="color:var(--green);margin-top:2px;"></i>
+      <p style="margin:0;font-size:0.85rem;color:var(--green);">
+        <span class="lang-id"><strong>Untuk editor:</strong> Simpan foto prototipe di folder <code>assets/images/</code> dengan nama yang sesuai (misal: <code>robot-tangan.jpg</code>). Foto akan otomatis tampil menggantikan ikon emoji.</span>
+        <span class="lang-en"><strong>For editors:</strong> Save prototype photos in the <code>assets/images/</code> folder with matching names (e.g., <code>robot-tangan.jpg</code>). Photos will automatically appear replacing the emoji icons.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO GALLERY -->
+<section class="bg-light" id="videos">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-red">🎥 <span class="lang-id">Video</span><span class="lang-en">Videos</span></span>
+      <h2><span class="lang-id">Galeri Video</span><span class="lang-en">Video Gallery</span></h2>
+      <p><span class="lang-id">Demo dan dokumentasi prototipe KeRis-Dimas ATAH</span><span class="lang-en">Demos and documentation of KeRis-Dimas ATAH prototypes</span></p>
+      <div class="section-divider divider-red"></div>
+    </div>
+
+    <div class="video-grid">
+
+      <!-- Video placeholder 1 — ganti src YouTube saat tersedia -->
+      <div class="video-card">
+        <div class="video-embed">
+          <!--
+            CARA MENAMBAH VIDEO YOUTUBE:
+            Ganti kode di bawah dengan:
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+          -->
+          <div class="video-placeholder">
+            <i class="fab fa-youtube"></i>
+            <p><span class="lang-id">Demo Robot Tangan Terapi Stroke</span><span class="lang-en">Stroke Therapy Hand Robot Demo</span></p>
+            <p style="font-size:0.75rem;opacity:0.5;"><span class="lang-id">Tambahkan link YouTube di sini</span><span class="lang-en">Add YouTube link here</span></p>
+          </div>
+        </div>
+        <div class="video-body">
+          <h3><span class="lang-id">Demo Robot Tangan — EMG Control</span><span class="lang-en">Hand Robot Demo — EMG Control</span></h3>
+          <p><span class="lang-id">Demonstrasi pengendalian robot tangan menggunakan sinyal EMG</span><span class="lang-en">Demonstration of hand robot control using EMG signals</span></p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-embed">
+          <div class="video-placeholder">
+            <i class="fab fa-youtube"></i>
+            <p>Demo Smart Wheelchair</p>
+            <p style="font-size:0.75rem;opacity:0.5;"><span class="lang-id">Tambahkan link YouTube di sini</span><span class="lang-en">Add YouTube link here</span></p>
+          </div>
+        </div>
+        <div class="video-body">
+          <h3>Demo Smart Wheelchair — CNN Navigation</h3>
+          <p><span class="lang-id">Navigasi otomatis kursi roda elektrik berbasis CNN</span><span class="lang-en">CNN-based automatic electric wheelchair navigation</span></p>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-embed">
+          <div class="video-placeholder">
+            <i class="fab fa-youtube"></i>
+            <p>Demo BOTANUV-19</p>
+            <p style="font-size:0.75rem;opacity:0.5;"><span class="lang-id">Tambahkan link YouTube di sini</span><span class="lang-en">Add YouTube link here</span></p>
+          </div>
+        </div>
+        <div class="video-body">
+          <h3>Robot Desinfektan BOTANUV-19</h3>
+          <p><span class="lang-id">Robot UV otomatis untuk sterilisasi ruang isolasi COVID-19</span><span class="lang-en">Automatic UV robot for COVID-19 isolation room sterilization</span></p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Note YouTube -->
+    <div style="background:var(--red-pale);border-radius:12px;padding:20px 24px;margin-top:32px;display:flex;gap:12px;align-items:flex-start;">
+      <i class="fab fa-youtube" style="color:var(--red);margin-top:2px;font-size:1.1rem;"></i>
+      <p style="margin:0;font-size:0.85rem;color:var(--red);">
+        <span class="lang-id"><strong>Untuk editor:</strong> Tambahkan video YouTube dengan mengganti komentar <code>&lt;!-- ... --&gt;</code> dengan tag <code>&lt;iframe src="https://www.youtube.com/embed/ID_VIDEO"&gt;</code>. ID Video ada di URL YouTube setelah <code>?v=</code>.</span>
+        <span class="lang-en"><strong>For editors:</strong> Add YouTube videos by replacing the comment with <code>&lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"&gt;</code>. The video ID is in the YouTube URL after <code>?v=</code>.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="name">KeRis-Dimas ATAH</div><div class="sub">Advanced Technology for Agriculture and Health</div></div>
+        <p><span class="lang-id">Kelompok Riset Universitas Jember.</span><span class="lang-en">Research Group of Universitas Jember.</span></p>
+        <div class="footer-socials" style="margin-top:16px;">
+          <a href="mailto:keristatah@gmail.com" class="footer-social-btn"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/kerisatah-unej" target="_blank" class="footer-social-btn"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Menu</h4><ul>
+        <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+        <li><a href="research.html"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+        <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+        <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4><span class="lang-id">Produk</span><span class="lang-en">Products</span></h4><ul>
+        <li><a href="#"><span class="lang-id">Bidang Kesehatan</span><span class="lang-en">Health</span></a></li>
+        <li><a href="#"><span class="lang-id">Bidang Pertanian</span><span class="lang-en">Agriculture</span></a></li>
+        <li><a href="#videos"><span class="lang-id">Galeri Video</span><span class="lang-en">Video Gallery</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kontak</h4><ul>
+        <li><a href="mailto:keristatah@gmail.com">keristatah@gmail.com</a></li>
+        <li><a href="https://unej.ac.id" target="_blank">Universitas Jember</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 KeRis-Dimas ATAH — Universitas Jember.</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+<script src="js/main.js"></script>
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('#products-grid .product-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(c => {
+        const cat = c.dataset.cat || '';
+        c.classList.toggle('hidden', f !== 'all' && !cat.includes(f));
+      });
+    });
+  });
+</script>
+</body>
+</html>

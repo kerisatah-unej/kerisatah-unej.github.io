@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penelitian — KeRis-Dimas ATAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .project-table { width:100%; border-collapse:collapse; background:white; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); }
+    .project-table thead { background:var(--blue); color:white; }
+    .project-table th, .project-table td { padding:14px 18px; text-align:left; font-size:0.88rem; border-bottom:1px solid #E8EDF2; }
+    .project-table tbody tr:hover { background:var(--blue-pale); }
+    .project-table tbody tr:last-child td { border-bottom:none; }
+    .project-table .amount { font-weight:700; color:var(--green); }
+    .tag-selaras { background:var(--green-pale); color:var(--green); padding:3px 10px; border-radius:10px; font-size:0.72rem; font-weight:700; }
+    .research-card { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border-left:4px solid var(--blue); margin-bottom:16px; }
+    .research-card.green { border-color:var(--green); }
+    .research-card h4 { font-size:0.95rem; font-weight:700; margin-bottom:6px; }
+    .research-card p { font-size:0.85rem; color:var(--gray); margin:0; }
+    .phase-badge { display:inline-block; padding:4px 14px; border-radius:20px; font-size:0.75rem; font-weight:700; margin-bottom:8px; }
+    .pb-basic { background:#FFF3E0; color:#E65100; }
+    .pb-applied { background:var(--blue-pale); color:var(--blue); }
+    .pb-dev { background:var(--green-pale); color:var(--green); }
+    .pb-market { background:var(--red-pale); color:var(--red); }
+    @media(max-width:768px){ .project-table { display:block; overflow-x:auto; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <div class="logo-circle">A</div>
+    <div class="brand-text">
+      <div class="brand-main">KeRis-Dimas ATAH</div>
+      <div class="brand-sub">Universitas Jember</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+    <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+    <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+    <li><a href="research.html" class="active"><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></a></li>
+    <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+    <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="pengabdian.html"><span class="lang-id">Pengabdian</span><span class="lang-en">Service</span></a></li>
+    <li><a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+    <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+    <li><div class="lang-btn"><button id="btn-id" class="active">ID</button><button id="btn-en">EN</button></div></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span><span class="lang-id">Penelitian</span><span class="lang-en">Research</span></span>
+    </div>
+    <h1><span class="lang-id">Penelitian & Roadmap</span><span class="lang-en">Research & Roadmap</span></h1>
+    <p><span class="lang-id">Rencana dan rekam jejak penelitian KeRis-Dimas ATAH 2018–2030</span><span class="lang-en">Research plans and track record of KeRis-Dimas ATAH 2018–2030</span></p>
+  </div>
+</div>
+
+<!-- ROADMAP OVERVIEW -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-red"><span class="lang-id">Peta Jalan Riset</span><span class="lang-en">Research Roadmap</span></span>
+      <h2><span class="lang-id">Roadmap Penelitian 2018–2030</span><span class="lang-en">Research Roadmap 2018–2030</span></h2>
+      <p><span class="lang-id">Dari penelitian dasar menuju hilirisasi produk ke pasar secara bertahap</span><span class="lang-en">From basic research to gradual market commercialization</span></p>
+      <div class="section-divider divider-red"></div>
+    </div>
+
+    <!-- Phase cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:60px;">
+      <div style="background:white;border-radius:14px;padding:28px;box-shadow:var(--shadow);border-top:5px solid #E65100;text-align:center;">
+        <div class="phase-badge pb-basic">2018 – 2023</div>
+        <div style="font-size:2rem;margin:12px 0;">🔬</div>
+        <h3 style="font-size:1rem;font-weight:800;margin-bottom:8px;"><span class="lang-id">Penelitian Dasar (R&D)</span><span class="lang-en">Basic Research (R&D)</span></h3>
+        <p style="font-size:0.82rem;color:var(--gray);"><span class="lang-id">Luaran: produk/teknologi dalam tulisan ilmiah</span><span class="lang-en">Output: technology in scientific publications</span></p>
+      </div>
+      <div style="background:white;border-radius:14px;padding:28px;box-shadow:var(--shadow);border-top:5px solid var(--blue);text-align:center;">
+        <div class="phase-badge pb-applied">2022 – 2026</div>
+        <div style="font-size:2rem;margin:12px 0;">⚙️</div>
+        <h3 style="font-size:1rem;font-weight:800;margin-bottom:8px;"><span class="lang-id">Penelitian Terapan</span><span class="lang-en">Applied Research</span></h3>
+        <p style="font-size:0.82rem;color:var(--gray);"><span class="lang-id">Luaran: jurnal, paten, hak cipta, buku, prototipe</span><span class="lang-en">Output: journals, patents, copyright, books, prototypes</span></p>
+      </div>
+      <div style="background:white;border-radius:14px;padding:28px;box-shadow:var(--shadow);border-top:5px solid var(--green);text-align:center;">
+        <div class="phase-badge pb-dev">2024 – 2028</div>
+        <div style="font-size:2rem;margin:12px 0;">🏭</div>
+        <h3 style="font-size:1rem;font-weight:800;margin-bottom:8px;"><span class="lang-id">Penelitian Pengembangan</span><span class="lang-en">Development Research</span></h3>
+        <p style="font-size:0.82rem;color:var(--gray);"><span class="lang-id">Luaran: prototipe skala industri, paten</span><span class="lang-en">Output: industrial-scale prototypes, patents</span></p>
+      </div>
+      <div style="background:white;border-radius:14px;padding:28px;box-shadow:var(--shadow);border-top:5px solid var(--red);text-align:center;">
+        <div class="phase-badge pb-market">2028 – ...</div>
+        <div style="font-size:2rem;margin:12px 0;">🚀</div>
+        <h3 style="font-size:1rem;font-weight:800;margin-bottom:8px;"><span class="lang-id">Hilirisasi ke Pasar</span><span class="lang-en">Market Commercialization</span></h3>
+        <p style="font-size:0.82rem;color:var(--gray);"><span class="lang-id">Luaran: produk komersial & pengabdian masyarakat</span><span class="lang-en">Output: commercial products & community service</span></p>
+      </div>
+    </div>
+
+    <!-- Detailed Roadmap Timeline -->
+    <div class="roadmap-timeline">
+      <div class="roadmap-item">
+        <div class="roadmap-dot blue"></div>
+        <div class="roadmap-content">
+          <div class="year text-blue">2018 – 2023 · R&D</div>
+          <h4><span class="lang-id">Fokus Penelitian Dasar</span><span class="lang-en">Basic Research Focus</span></h4>
+          <p><span class="lang-id">Sistem navigasi robot indoor & outdoor · Konsep Robot Rehabilitasi · Konsep Smart Farming berbasis AI dan Robot</span><span class="lang-en">Indoor & outdoor robot navigation · Rehabilitation Robot Concept · AI and Robot-based Smart Farming Concept</span></p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot green"></div>
+        <div class="roadmap-content">
+          <div class="year text-green">2022 – 2026 · Terapan</div>
+          <h4><span class="lang-id">Implementasi & Uji Coba</span><span class="lang-en">Implementation & Testing</span></h4>
+          <p><span class="lang-id">Penerapan sistem navigasi robot · Robot Rehabilitasi · Smart Farming berbasis AI · Penyempurnaan metode teknologi</span><span class="lang-en">Robot navigation implementation · Rehabilitation Robot · AI Smart Farming · Technology method refinement</span></p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot red"></div>
+        <div class="roadmap-content">
+          <div class="year text-red">2024 – 2028 · Pengembangan</div>
+          <h4><span class="lang-id">Skala Industri</span><span class="lang-en">Industrial Scale</span></h4>
+          <p><span class="lang-id">Perbaikan & penyempurnaan teknologi · Prototipe skala industri · Persiapan hilirisasi ke pasar</span><span class="lang-en">Technology improvement & refinement · Industrial-scale prototypes · Market commercialization preparation</span></p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot blue"></div>
+        <div class="roadmap-content">
+          <div class="year text-blue">2028 – … · Pasar</div>
+          <h4><span class="lang-id">Komersialisasi & Pengabdian</span><span class="lang-en">Commercialization & Community Service</span></h4>
+          <p><span class="lang-id">Hilirisasi produk teknologi ke pasar · Pengabdian masyarakat dari hasil riset · Revenue generating UNEJ</span><span class="lang-en">Technology product commercialization · Community service from research · UNEJ revenue generating</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIDANG PENELITIAN -->
+<section class="bg-light" id="health">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-blue">🏥 <span class="lang-id">Bidang Kesehatan</span><span class="lang-en">Health Field</span></span>
+      <h2><span class="lang-id">Rencana Penelitian — Bidang Kesehatan</span><span class="lang-en">Research Plan — Health Field</span></h2>
+      <div class="section-divider divider-blue"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="project-table">
+        <thead>
+          <tr>
+            <th><span class="lang-id">Topik</span><span class="lang-en">Topic</span></th>
+            <th>2018 – 2023</th>
+            <th>2023 – 2027</th>
+            <th>2027 – 2030</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Smart Wheelchair</strong></td>
+            <td><span class="lang-id">Studi literatur & metode baru</span><span class="lang-en">Literature study & new methods</span></td>
+            <td><span class="lang-id">Implementasi</span><span class="lang-en">Implementation</span></td>
+            <td><span class="lang-id">Pengembangan & komersialisasi</span><span class="lang-en">Development & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="lang-id">Robot Tangan Terapi Stroke</span><span class="lang-en">Stroke Therapy Hand Robot</span></strong></td>
+            <td><span class="lang-id">Penemuan metode rehabilitasi terbaik</span><span class="lang-en">Finding the best rehabilitation method</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="lang-id">Lampu Cerdas Ruang Operasi</span><span class="lang-en">Smart OR Lamp</span></strong></td>
+            <td><span class="lang-id">Penemuan metode terbaik</span><span class="lang-en">Finding the best method</span></td>
+            <td><span class="lang-id">Penerapan & uji efektivitas</span><span class="lang-en">Application & effectiveness testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong>Guided Tool for Blind</strong></td>
+            <td><span class="lang-id">Penemuan metode terbaik</span><span class="lang-en">Finding the best method</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="lang-id">Robot Asisten Perawat</span><span class="lang-en">Nurse Assistant Robot</span></strong></td>
+            <td><span class="lang-id">Penemuan metode terbaik</span><span class="lang-en">Finding the best method</span></td>
+            <td><span class="lang-id">Penerapan & uji efektivitas</span><span class="lang-en">Application & effectiveness testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="lang-id">Robot Sterilisasi</span><span class="lang-en">Sterilization Robot</span></strong></td>
+            <td><span class="lang-id">Penemuan metode terbaik</span><span class="lang-en">Finding the best method</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BIDANG PERTANIAN -->
+<section id="agriculture">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-green">🌾 <span class="lang-id">Bidang Pertanian</span><span class="lang-en">Agriculture Field</span></span>
+      <h2><span class="lang-id">Rencana Penelitian — Bidang Pertanian</span><span class="lang-en">Research Plan — Agriculture Field</span></h2>
+      <div class="section-divider divider-green"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="project-table">
+        <thead style="background:var(--green);">
+          <tr>
+            <th><span class="lang-id">Topik</span><span class="lang-en">Topic</span></th>
+            <th>2018 – 2023</th>
+            <th>2023 – 2027</th>
+            <th>2027 – 2030</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Precision Farming</strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong><span class="lang-id">Mesin Pengering Kopi</span><span class="lang-en">Coffee Dryer Machine</span></strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji efektivitas</span><span class="lang-en">Application & effectiveness testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong>Fermentor Kopi Spesialiti</strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong>Fermentor MOCAF</strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji efektivitas</span><span class="lang-en">Application & effectiveness testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong>Smart Tractor</strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji kehandalan</span><span class="lang-en">Application & reliability testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+          <tr>
+            <td><strong>Aquaculture</strong></td>
+            <td><span class="lang-id">Desain alat & metode baru</span><span class="lang-en">Equipment design & new methods</span></td>
+            <td><span class="lang-id">Penerapan & uji efektivitas</span><span class="lang-en">Application & effectiveness testing</span></td>
+            <td><span class="lang-id">Uji industri & komersialisasi</span><span class="lang-en">Industrial testing & commercialization</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REKAM JEJAK PROYEK -->
+<section class="bg-light">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag tag-red"><span class="lang-id">Rekam Jejak</span><span class="lang-en">Track Record</span></span>
+      <h2><span class="lang-id">Proyek Penelitian yang Telah Dilaksanakan</span><span class="lang-en">Completed Research Projects</span></h2>
+      <div class="section-divider divider-red"></div>
+    </div>
+
+    <!-- 2019 -->
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--blue);margin-bottom:16px;padding-left:4px;border-left:4px solid var(--blue);padding-left:12px;">Tahun 2019</h3>
+    <div style="overflow-x:auto;margin-bottom:40px;">
+      <table class="project-table">
+        <thead><tr>
+          <th>Skim</th>
+          <th><span class="lang-id">Judul</span><span class="lang-en">Title</span></th>
+          <th><span class="lang-id">Dana</span><span class="lang-en">Funding</span></th>
+          <th><span class="lang-id">Luaran</span><span class="lang-en">Output</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>DRPM Penelitian Terapan</td>
+            <td>Rancang Bangun Robot Tangan Untuk Penyandang Disabilitas Akibat Stroke (Tahun Ketiga)</td>
+            <td class="amount">Rp 238 jt</td>
+            <td>1 Artikel Q2 Scopus · 1 Paten · 1 Buku</td>
+          </tr>
+          <tr>
+            <td>DRPM-PPD</td>
+            <td>Pengembangan Sistem Kendali Tangan Prostetik Berbasis EEG Bagi Penderita Cacat Amputasi (Tahun Kedua)</td>
+            <td class="amount">Rp 221 jt</td>
+            <td>1 Seminar Internasional · 1 Artikel Q3 · Jurnal Nasional</td>
+          </tr>
+          <tr>
+            <td>HIBAH IDB</td>
+            <td>Pengembangan Prototipe Alat Enkapsulasi Berbasis Sodium Alginate (Tahun Kedua)</td>
+            <td class="amount">Rp 80 jt</td>
+            <td>Prototipe Alat · Paten Terdaftar</td>
+          </tr>
+          <tr>
+            <td>DRPM Penelitian Dasar</td>
+            <td>Desain Sistem Kontrol Mioelektrik Proporsional & Simultan — Randomized Deep Learning</td>
+            <td class="amount">Rp 72 jt</td>
+            <td>Proceeding Scopus · 1 Artikel Q2</td>
+          </tr>
+          <tr>
+            <td>Hibah KeRis</td>
+            <td>Rancang Bangun Smart Lighting Untuk Mendukung Kinerja Paramedis di Ruang Operasi RS</td>
+            <td class="amount">Rp 30 jt</td>
+            <td>Prototipe · Draft Jurnal</td>
+          </tr>
+          <tr>
+            <td>Mandiri</td>
+            <td>Kontrol Kursi Roda berbasis Kecerdasan Buatan</td>
+            <td class="amount">Rp 5 jt</td>
+            <td>2 Seminar Scopus · 2 Artikel S2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2020 -->
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--green);margin-bottom:16px;border-left:4px solid var(--green);padding-left:12px;">Tahun 2020</h3>
+    <div style="overflow-x:auto;margin-bottom:40px;">
+      <table class="project-table">
+        <thead style="background:var(--green);"><tr>
+          <th>Skim</th>
+          <th><span class="lang-id">Judul</span><span class="lang-en">Title</span></th>
+          <th><span class="lang-id">Dana</span><span class="lang-en">Funding</span></th>
+          <th><span class="lang-id">Luaran</span><span class="lang-en">Output</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>Hibah Tesis Magister</td>
+            <td>Perancangan Sistem Kendali Kecepatan Motor DC Brushless — Multi-Layer ELM</td>
+            <td class="amount">Rp 38,98 jt</td>
+            <td>1 Artikel Sinta S2 · 2 Artikel Scopus</td>
+          </tr>
+          <tr>
+            <td>Hibah Tesis Magister</td>
+            <td>Otentifikasi Daun Herbal menggunakan Convolution Neural Network dan Raspberry Pi</td>
+            <td class="amount">Rp 39,2 jt</td>
+            <td>1 Artikel Sinta S2 · 2 Artikel Scopus</td>
+          </tr>
+          <tr>
+            <td>Hibah Tesis Magister</td>
+            <td>Desain Navigasi Kursi Roda Elektrik untuk Pasien — CNN pada Raspberry Pi 3</td>
+            <td class="amount">Rp 37,47 jt</td>
+            <td>1 Artikel Sinta S2 · 2 Artikel Scopus</td>
+          </tr>
+          <tr>
+            <td>DRPM Dasar</td>
+            <td>Desain Sistem Kontrol Mioelektrik Proporsional & Simultan — Randomized Deep Learning</td>
+            <td class="amount">Rp 64,66 jt</td>
+            <td>1 Artikel Scopus · 1 Artikel Q2</td>
+          </tr>
+          <tr>
+            <td>PNBP UNEJ</td>
+            <td>Pengembangan Robot Desinfektan berbasis UV (BOTANUV-19) untuk COVID-19</td>
+            <td>—</td>
+            <td>Prototipe Robot</td>
+          </tr>
+          <tr>
+            <td>PNBP UNEJ</td>
+            <td>Pengembangan Alat Pelindung Diri Faceshield Printer 3D — SARS-CoV-2</td>
+            <td>—</td>
+            <td>Prototipe & Produk Faceshield</td>
+          </tr>
+          <tr>
+            <td>PNBP UNEJ</td>
+            <td>Pengembangan Ventilator Penanganan Pasien COVID-19</td>
+            <td>—</td>
+            <td>Prototipe Ventilator</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pengabdian -->
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--red);margin-bottom:16px;border-left:4px solid var(--red);padding-left:12px;">
+      <span class="lang-id">Pengabdian Masyarakat</span><span class="lang-en">Community Service</span>
+    </h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div style="background:var(--blue-pale);border-radius:12px;padding:24px;">
+        <h4 style="color:var(--blue);font-weight:700;margin-bottom:12px;">🏥 <span class="lang-id">Bidang Kesehatan</span><span class="lang-en">Health Field</span></h4>
+        <ul style="padding-left:20px;color:var(--gray);font-size:0.88rem;">
+          <li style="margin-bottom:8px;"><span class="lang-id">Pelatihan Robot Sterilisasi</span><span class="lang-en">Sterilization Robot Training</span></li>
+          <li><span class="lang-id">Sosialisasi Smart Wheelchair</span><span class="lang-en">Smart Wheelchair Socialization</span></li>
+        </ul>
+      </div>
+      <div style="background:var(--green-pale);border-radius:12px;padding:24px;">
+        <h4 style="color:var(--green);font-weight:700;margin-bottom:12px;">🌾 <span class="lang-id">Bidang Pertanian</span><span class="lang-en">Agriculture Field</span></h4>
+        <ul style="padding-left:20px;color:var(--gray);font-size:0.88rem;">
+          <li style="margin-bottom:8px;"><span class="lang-id">Aquaculture</span><span class="lang-en">Aquaculture</span></li>
+          <li><span class="lang-id">Fermentor MOCAF</span><span class="lang-en">MOCAF Fermenter</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="name">KeRis-Dimas ATAH</div><div class="sub">Advanced Technology for Agriculture and Health</div></div>
+        <p><span class="lang-id">Kelompok Riset Universitas Jember.</span><span class="lang-en">Research Group of Universitas Jember.</span></p>
+        <div class="footer-socials" style="margin-top:16px;">
+          <a href="mailto:keristatah@gmail.com" class="footer-social-btn"><i class="fas fa-envelope"></i></a>
+          <a href="https://github.com/kerisatah-unej" target="_blank" class="footer-social-btn"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Menu</h4><ul>
+        <li><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></li>
+        <li><a href="about.html"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a></li>
+        <li><a href="team.html"><span class="lang-id">Tim</span><span class="lang-en">Team</span></a></li>
+        <li><a href="publications.html"><span class="lang-id">Publikasi</span><span class="lang-en">Publications</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4><span class="lang-id">Lainnya</span><span class="lang-en">More</span></h4><ul>
+        <li><a href="products.html"><span class="lang-id">Produk</span><span class="lang-en">Products</span></a></li>
+        <li><a href="news.html"><span class="lang-id">Berita</span><span class="lang-en">News</span></a></li>
+        <li><a href="contact.html"><span class="lang-id">Kontak</span><span class="lang-en">Contact</span></a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Kontak</h4><ul>
+        <li><a href="mailto:keristatah@gmail.com">keristatah@gmail.com</a></li>
+        <li><a href="https://unej.ac.id" target="_blank">Universitas Jember</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 KeRis-Dimas ATAH — Universitas Jember.</p></div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
+<script src="js/main.js"></script>
+</body>
+</html>
