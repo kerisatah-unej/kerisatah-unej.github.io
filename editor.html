@@ -252,6 +252,14 @@
         <div class="form-group"><label>Tahun</label><input id="pg-tahun" placeholder="2025"></div>
       </div>
       <div class="form-row">
+        <div class="form-group"><label>Foto (nama file di assets/images/, pisahkan koma jika lebih dari satu)</label><input id="pg-foto" placeholder="foto1.jpg, foto2.jpg"></div>
+        <div class="form-group"><label>Link YouTube (opsional)</label><input id="pg-video" placeholder="https://youtu.be/xxxxx atau ID saja"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Deskripsi Tambahan / Tim (Indonesia)</label><textarea id="pg-extra-id" placeholder="Tim: Nama1, Nama2, Nama3"></textarea></div>
+        <div class="form-group"><label>Deskripsi Tambahan / Tim (English)</label><textarea id="pg-extra-en" placeholder="Team: Name1, Name2, Name3"></textarea></div>
+      </div>
+      <div class="form-row">
         <div class="form-group"><label>Kategori</label>
           <select id="pg-cat">
             <option value="cat-health">🏥 Kesehatan</option>
@@ -259,7 +267,7 @@
             <option value="cat-tech">💡 Teknologi</option>
           </select>
         </div>
-        <div class="form-group"><label>Emoji</label><input id="pg-emoji" value="🤝"></div>
+        <div class="form-group"><label>Emoji (tampil jika tidak ada foto)</label><input id="pg-emoji" value="🤝"></div>
       </div>
       <div class="form-btns">
         <button class="btn-save" onclick="saveItem('pengabdian')"><i class="fas fa-save"></i> <span id="btn-label-pengabdian">Simpan ke GitHub</span></button>
@@ -628,8 +636,8 @@ function fillFormFromHtml(tabName, html) {
     setVal('pg-desc-id',  txt(card, 'p .lang-id') || txt(card, 'p'));
     setVal('pg-desc-en',  txt(card, 'p .lang-en'));
     const metaSpans = card.querySelectorAll('.act-card-meta span');
-    setVal('pg-lokasi', metaSpans[0] ? metaSpans[0].textContent.trim() : '');
-    setVal('pg-tahun',  metaSpans[1] ? metaSpans[1].textContent.trim() : '');
+    setVal('pg-lokasi', metaSpans[0] ? metaSpans[0].textContent.replace(/^[^\w]*/, '').trim() : '');
+    setVal('pg-tahun',  metaSpans[1] ? metaSpans[1].textContent.replace(/^[^\w]*/, '').trim() : '');
     const imgEl = card.querySelector('.act-img-wrap');
     if (imgEl) setVal('pg-emoji', imgEl.textContent.trim());
     const catEl = card.querySelector('.act-category');
@@ -639,6 +647,15 @@ function fillFormFromHtml(tabName, html) {
       else if (cls.includes('cat-agri')) setSelect('pg-cat', 'cat-agri');
       else if (cls.includes('cat-tech')) setSelect('pg-cat', 'cat-tech');
     }
+    // foto: parse data-foto (comma-separated paths) → strip assets/images/ prefix
+    const fotoRaw = card.getAttribute('data-foto') || '';
+    setVal('pg-foto', fotoRaw.split(',').map(s => s.trim().replace('assets/images/', '')).filter(Boolean).join(', '));
+    // video: convert YouTube embed ID back to short URL
+    const videoId = card.getAttribute('data-video') || '';
+    setVal('pg-video', videoId ? 'https://youtu.be/' + videoId : '');
+    // extra desc
+    setVal('pg-extra-id', card.getAttribute('data-extra-id') || '');
+    setVal('pg-extra-en', card.getAttribute('data-extra-en') || '');
   }
 
   else if (tabName === 'produk') {
@@ -818,11 +835,29 @@ function genPengabdian() {
   if (!judulId) { alert('Isi judul kegiatan dulu'); return null; }
   const judulEn = v('pg-judul-en'), descId = v('pg-desc-id'), descEn = v('pg-desc-en');
   const lokasi = v('pg-lokasi'), tahun = v('pg-tahun'), cat = v('pg-cat'), emoji = v('pg-emoji') || '🤝';
+  const extraId = v('pg-extra-id'), extraEn = v('pg-extra-en');
   const catLabel   = { 'cat-health':'🏥 Kesehatan', 'cat-agri':'🌾 Pertanian', 'cat-tech':'💡 Teknologi' };
   const catLabelEn = { 'cat-health':'🏥 Health', 'cat-agri':'🌾 Agriculture', 'cat-tech':'💡 Technology' };
+  // foto: "foto1.jpg, foto2.jpg" → "assets/images/foto1.jpg,assets/images/foto2.jpg"
+  const fotoRaw = v('pg-foto') || '';
+  const fotoList = fotoRaw.split(',').map(s => s.trim()).filter(Boolean);
+  const fotoAttr = fotoList.map(f => 'assets/images/' + f).join(',');
+  const firstFoto = fotoList.length ? 'assets/images/' + fotoList[0] : '';
+  // video: extract YouTube ID from any URL format or bare ID
+  const videoRaw = v('pg-video') || '';
+  const videoId = videoRaw.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/)?.[1] || (videoRaw.match(/^[A-Za-z0-9_-]{11}$/) ? videoRaw : '');
+  // img wrap: show first photo if available, else emoji
+  const imgWrap = firstFoto
+    ? `<img src="${e(firstFoto)}" alt="${e(judulId)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" onerror="this.parentElement.innerHTML='${emoji}'">`
+    : emoji;
   return `
-      <div class="act-small-card">
-        <div class="act-img-wrap">${emoji}</div>
+      <div class="act-small-card"
+           data-judul-id="${e(judulId)}" data-judul-en="${e(judulEn)}"
+           data-desc-id="${e(descId)}" data-desc-en="${e(descEn)}"
+           data-extra-id="${e(extraId)}" data-extra-en="${e(extraEn)}"
+           data-lokasi="${e(lokasi)}" data-tahun="${e(tahun)}"
+           data-foto="${e(fotoAttr)}" data-video="${e(videoId)}">
+        <div class="act-img-wrap">${imgWrap}</div>
         <div class="act-card-body">
           <span class="act-category ${cat}" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
             <span class="lang-id">${catLabel[cat]||''}</span><span class="lang-en">${catLabelEn[cat]||''}</span>
@@ -833,6 +868,9 @@ function genPengabdian() {
             <span><i class="fas fa-map-marker-alt"></i> ${e(lokasi)}</span>
             <span><i class="fas fa-calendar"></i> ${e(tahun)}</span>
           </div>
+          <button class="btn-detail" onclick="openActModal(this)">
+            <span class="lang-id">Detail</span><span class="lang-en">Details</span>
+          </button>
         </div>
       </div>`;
 }
