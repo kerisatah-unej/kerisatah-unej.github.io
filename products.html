@@ -40,6 +40,27 @@
     .filter-btn { padding:7px 18px; border-radius:30px; border:2px solid #E0E0E0; background:white; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--gray); }
     .filter-btn.active, .filter-btn:hover { border-color:var(--blue); background:var(--blue); color:white; }
     .product-card.hidden { display:none; }
+    .btn-detail { display:inline-block; margin-top:12px; padding:7px 16px; background:var(--blue); color:white; border:none; border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer; transition:background 0.2s; }
+    .btn-detail:hover { background:#0d47a1; }
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:center; justify-content:center; padding:16px; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:white; border-radius:16px; max-width:620px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(0,0,0,0.25); animation:modalIn 0.25s ease; }
+    @keyframes modalIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+    .modal-img { width:100%; height:220px; object-fit:cover; background:var(--light-gray); display:flex; align-items:center; justify-content:center; font-size:5rem; border-radius:16px 16px 0 0; overflow:hidden; }
+    .modal-img img { width:100%; height:100%; object-fit:cover; }
+    .modal-body { padding:28px; }
+    .modal-tag { display:inline-block; padding:3px 12px; border-radius:10px; font-size:0.72rem; font-weight:700; margin-bottom:12px; }
+    .modal-body h2 { font-size:1.25rem; font-weight:800; margin-bottom:10px; }
+    .modal-desc { color:var(--gray); font-size:0.92rem; line-height:1.7; margin-bottom:16px; }
+    .modal-specs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .modal-spec { background:var(--light-gray); border-radius:8px; padding:10px 14px; }
+    .modal-spec .spec-label { font-size:0.72rem; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+    .modal-spec .spec-val { font-size:0.9rem; font-weight:600; color:var(--dark); }
+    .modal-tags-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .modal-close { position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#666; line-height:1; }
+    .modal-header-bar { position:relative; padding:16px 20px 0; display:flex; justify-content:flex-end; }
+    @media(max-width:500px){ .modal-specs{grid-template-columns:1fr;} }
   </style>
 </head>
 <body>
@@ -99,7 +120,17 @@
     <div class="products-grid" id="products-grid">
 
       <!-- Robot Tangan Stroke -->
-      <div class="product-card" data-cat="health">
+      <div class="product-card" data-cat="health"
+           data-name-id="Robot Tangan untuk Terapi Stroke"
+           data-name-en="Stroke Therapy Hand Robot"
+           data-img="assets/images/robot-tangan.jpg" data-emoji="🦾"
+           data-tag-id="🏥 Kesehatan" data-tag-en="🏥 Health" data-tag-class="pt-health"
+           data-desc-id="Robot rehabilitasi tangan berbasis sinyal myoelectric (EMG) untuk pasien pasca serangan stroke. Sistem membaca niat gerakan dari sinyal otot lengan dan menggerakkan jari-jari robot secara sinkron. Dikembangkan sejak 2018 dengan pendekatan deep learning untuk klasifikasi sinyal."
+           data-desc-en="Hand rehabilitation robot based on myoelectric (EMG) signals for post-stroke patients. The system reads movement intent from forearm muscle signals and synchronously moves robotic fingers. Developed since 2018 using deep learning for signal classification."
+           data-tech="EMG · Deep Learning · Signal Processing"
+           data-status-id="Prototipe — Uji Klinis" data-status-en="Prototype — Clinical Testing"
+           data-year="2018–sekarang" data-fund-id="DRPM Dikti, Mandiri" data-fund-en="DRPM Dikti, Self-funded"
+           data-output-id="Paten, Publikasi Scopus Q2, Buku" data-output-en="Patent, Scopus Q2 Publication, Book">
         <div class="product-img">
           <img src="assets/images/robot-tangan.jpg" alt="Robot Tangan Terapi Stroke"
                onerror="this.parentElement.innerHTML='🦾';">
@@ -113,11 +144,21 @@
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Deep Learning</span>
             <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Paten</span><span class="lang-en">Patent</span></span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Smart Wheelchair -->
-      <div class="product-card" data-cat="health">
+      <div class="product-card" data-cat="health"
+           data-name-id="Smart Wheelchair" data-name-en="Smart Wheelchair"
+           data-img="assets/images/smart-wheelchair.jpg" data-emoji="♿"
+           data-tag-id="🏥 Kesehatan" data-tag-en="🏥 Health" data-tag-class="pt-health"
+           data-desc-id="Kursi roda elektrik cerdas dengan kontrol berbasis CNN dan EEG untuk pasien penyandang cacat fisik. Sistem mampu melakukan navigasi otomatis di dalam ruangan, mendeteksi halangan, dan dikendalikan melalui sinyal otak (EEG) maupun joystick."
+           data-desc-en="Intelligent electric wheelchair with CNN and EEG-based control for physically disabled patients. The system can autonomously navigate indoors, detect obstacles, and be controlled via brain signals (EEG) or joystick."
+           data-tech="CNN · EEG · Raspberry Pi · Computer Vision"
+           data-status-id="Prototipe — Uji Fungsional" data-status-en="Prototype — Functional Testing"
+           data-year="2019–sekarang" data-fund-id="DRPM Dikti" data-fund-en="DRPM Dikti"
+           data-output-id="Publikasi Scopus, Prototipe Fungsional" data-output-en="Scopus Publication, Functional Prototype">
         <div class="product-img">
           <img src="assets/images/smart-wheelchair.jpg" alt="Smart Wheelchair"
                onerror="this.parentElement.innerHTML='♿';">
@@ -131,11 +172,21 @@
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">EEG</span>
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Raspberry Pi</span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Lampu Cerdas Ruang Operasi -->
-      <div class="product-card" data-cat="health">
+      <div class="product-card" data-cat="health"
+           data-name-id="Smart Lighting Ruang Operasi" data-name-en="Smart OR Lighting"
+           data-img="assets/images/smart-lamp.jpg" data-emoji="💡"
+           data-tag-id="🏥 Kesehatan" data-tag-en="🏥 Health" data-tag-class="pt-health"
+           data-desc-id="Sistem pencahayaan cerdas yang dirancang khusus untuk mendukung kinerja paramedis di ruang operasi rumah sakit. Sistem dapat menyesuaikan intensitas dan arah cahaya secara otomatis sesuai kebutuhan prosedur operasi."
+           data-desc-en="Smart lighting system specifically designed to support paramedic performance in hospital operating rooms. The system can automatically adjust light intensity and direction according to surgical procedure needs."
+           data-tech="Embedded System · Sensor · IoT"
+           data-status-id="Prototipe — Uji di RS" data-status-en="Prototype — Hospital Testing"
+           data-year="2020" data-fund-id="PNBP UNEJ" data-fund-en="PNBP UNEJ"
+           data-output-id="Prototipe Fungsional" data-output-en="Functional Prototype">
         <div class="product-img">
           <img src="assets/images/smart-lamp.jpg" alt="Lampu Cerdas Ruang Operasi"
                onerror="this.parentElement.innerHTML='💡';">
@@ -147,11 +198,21 @@
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;"><span class="lang-id">Prototipe</span><span class="lang-en">Prototype</span></span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Robot Sterilisasi BOTANUV -->
-      <div class="product-card" data-cat="health covid">
+      <div class="product-card" data-cat="health covid"
+           data-name-id="Robot Desinfektan BOTANUV-19" data-name-en="BOTANUV-19 Disinfectant Robot"
+           data-img="assets/images/botanuv.jpg" data-emoji="🤖"
+           data-tag-id="🦠 COVID-19" data-tag-en="🦠 COVID-19" data-tag-class="pt-covid"
+           data-desc-id="Robot desinfektan otonom berbasis lampu UV untuk sterilisasi ruang isolasi pasien COVID-19. Robot ini bergerak mandiri di dalam ruangan, menghindari halangan, dan memastikan seluruh area terpapar sinar UV dengan dosis yang cukup untuk membunuh virus."
+           data-desc-en="Autonomous UV-based disinfectant robot for sterilizing COVID-19 patient isolation rooms. The robot moves independently indoors, avoids obstacles, and ensures the entire area is exposed to UV light with sufficient dose to kill the virus."
+           data-tech="UV Lamp · Autonomous Navigation · Embedded System"
+           data-status-id="Prototipe — Digunakan RS" data-status-en="Prototype — Hospital Deployed"
+           data-year="2020" data-fund-id="PNBP UNEJ" data-fund-en="PNBP UNEJ"
+           data-output-id="Prototipe Fungsional, Publikasi" data-output-en="Functional Prototype, Publication">
         <div class="product-img">
           <img src="assets/images/botanuv.jpg" alt="Robot BOTANUV-19"
                onerror="this.parentElement.innerHTML='🤖';">
@@ -164,11 +225,21 @@
             <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">UV Robot</span>
             <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">PNBP UNEJ</span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Ventilator -->
-      <div class="product-card" data-cat="health covid">
+      <div class="product-card" data-cat="health covid"
+           data-name-id="Ventilator Pasien COVID-19" data-name-en="COVID-19 Patient Ventilator"
+           data-img="assets/images/ventilator.jpg" data-emoji="🫁"
+           data-tag-id="🦠 COVID-19" data-tag-en="🦠 COVID-19" data-tag-class="pt-covid"
+           data-desc-id="Prototipe ventilator darurat yang dikembangkan sebagai respons cepat terhadap kelangkaan alat bantu napas pada masa pandemi COVID-19. Dirancang dengan komponen yang mudah didapat dan dapat diproduksi dalam jumlah besar dengan biaya terjangkau."
+           data-desc-en="Emergency ventilator prototype developed as a rapid response to the shortage of breathing equipment during the COVID-19 pandemic. Designed with easily available components for affordable mass production."
+           data-tech="Embedded System · Pneumatik · Arduino"
+           data-status-id="Prototipe Darurat" data-status-en="Emergency Prototype"
+           data-year="2020" data-fund-id="PNBP UNEJ" data-fund-en="PNBP UNEJ"
+           data-output-id="Prototipe Fungsional" data-output-en="Functional Prototype">
         <div class="product-img">
           <img src="assets/images/ventilator.jpg" alt="Ventilator COVID-19"
                onerror="this.parentElement.innerHTML='🫁';">
@@ -180,11 +251,21 @@
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;"><span class="lang-id">Prototipe Darurat</span><span class="lang-en">Emergency Prototype</span></span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Faceshield -->
-      <div class="product-card" data-cat="health covid">
+      <div class="product-card" data-cat="health covid"
+           data-name-id="Faceshield Printer 3D" data-name-en="3D Printed Faceshield"
+           data-img="assets/images/faceshield.jpg" data-emoji="🛡️"
+           data-tag-id="🦠 COVID-19" data-tag-en="🦠 COVID-19" data-tag-class="pt-covid"
+           data-desc-id="Alat pelindung diri (APD) berupa faceshield yang diproduksi menggunakan printer 3D sebagai upaya pencegahan penyebaran SARS-CoV-2. Diproduksi massal dan didistribusikan ke tenaga medis di RS sekitar Jember selama masa pandemi."
+           data-desc-en="Personal protective equipment (PPE) faceshield produced using 3D printers to prevent the spread of SARS-CoV-2. Mass-produced and distributed to medical staff at hospitals around Jember during the pandemic."
+           data-tech="3D Printing · FDM · PLA Material"
+           data-status-id="Produksi Massal (2020)" data-status-en="Mass Production (2020)"
+           data-year="2020" data-fund-id="Mandiri / Donasi" data-fund-en="Self-funded / Donation"
+           data-output-id="Ribuan unit didistribusikan ke RS" data-output-en="Thousands of units distributed to hospitals">
         <div class="product-img">
           <img src="assets/images/faceshield.jpg" alt="Faceshield 3D"
                onerror="this.parentElement.innerHTML='🛡️';">
@@ -197,11 +278,21 @@
             <span style="font-size:0.75rem;background:var(--red-pale);color:var(--red);padding:3px 10px;border-radius:8px;">3D Printing</span>
             <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Produk</span><span class="lang-en">Product</span></span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Alat Enkapsulasi -->
-      <div class="product-card" data-cat="agri">
+      <div class="product-card" data-cat="agri"
+           data-name-id="Alat Enkapsulasi Sodium Alginate" data-name-en="Sodium Alginate Encapsulation Device"
+           data-img="assets/images/enkapsulasi.jpg" data-emoji="⚗️"
+           data-tag-id="🌾 Pertanian" data-tag-en="🌾 Agriculture" data-tag-class="pt-agri"
+           data-desc-id="Prototipe alat enkapsulasi berbasis Sodium Alginate dengan sistem kontrol otomatis untuk produksi massal pupuk atau bahan aktif pertanian. Alat ini memungkinkan pelepasan bahan aktif secara terkontrol ke tanah, meningkatkan efisiensi pemupukan dan mengurangi pemborosan."
+           data-desc-en="Sodium Alginate-based encapsulation device prototype with automatic control system for mass production of fertilizers or active agricultural materials. The device enables controlled release of active substances into soil, improving fertilization efficiency and reducing waste."
+           data-tech="Sodium Alginate · Control System · Mekanik"
+           data-status-id="Prototipe — Uji Produksi" data-status-en="Prototype — Production Testing"
+           data-year="2019–2020" data-fund-id="Hibah IDB — Rp 80 juta" data-fund-en="IDB Grant — IDR 80 million"
+           data-output-id="Paten, Prototipe Siap Produksi" data-output-en="Patent, Production-ready Prototype">
         <div class="product-img">
           <img src="assets/images/enkapsulasi.jpg" alt="Alat Enkapsulasi"
                onerror="this.parentElement.innerHTML='⚗️';">
@@ -214,11 +305,21 @@
             <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;">Hibah IDB</span>
             <span style="font-size:0.75rem;background:var(--green-pale);color:var(--green);padding:3px 10px;border-radius:8px;"><span class="lang-id">Paten</span><span class="lang-en">Patent</span></span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- Holonomic Robot -->
-      <div class="product-card" data-cat="agri health">
+      <div class="product-card" data-cat="agri health"
+           data-name-id="Robot Beroda Holonomik" data-name-en="Holonomic Wheeled Robot"
+           data-img="assets/images/holonomic-robot.jpg" data-emoji="🚗"
+           data-tag-id="🤖 Robotika" data-tag-en="🤖 Robotics" data-tag-class="pt-agri"
+           data-desc-id="Robot beroda holonomik dengan sistem lane tracking berbasis pengolahan citra digital. Roda holonomik memungkinkan robot bergerak ke segala arah tanpa perlu berputar, sehingga sangat cocok untuk navigasi di lorong sempit lahan pertanian maupun dalam ruangan."
+           data-desc-en="Holonomic wheeled robot with image processing-based lane tracking. Holonomic wheels allow the robot to move in any direction without turning, making it ideal for navigation in narrow agricultural field corridors and indoors."
+           data-tech="Image Processing · Holonomic Wheel · OpenCV · Raspberry Pi"
+           data-status-id="Prototipe Fungsional" data-status-en="Functional Prototype"
+           data-year="2020" data-fund-id="DRPM Dikti" data-fund-en="DRPM Dikti"
+           data-output-id="Publikasi SINTA 2" data-output-en="SINTA 2 Publication">
         <div class="product-img">
           <img src="assets/images/holonomic-robot.jpg" alt="Robot Holonomik"
                onerror="this.parentElement.innerHTML='🚗';">
@@ -231,19 +332,12 @@
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;"><span class="lang-id">Pengolahan Citra</span><span class="lang-en">Image Processing</span></span>
             <span style="font-size:0.75rem;background:var(--blue-pale);color:var(--blue);padding:3px 10px;border-radius:8px;">Sinta 2</span>
           </div>
+          <button class="btn-detail" onclick="openModal(this.closest('.product-card'))"><span class="lang-id">Lihat Detail</span><span class="lang-en">View Detail</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
     </div><!-- end products-grid -->
 
-    <!-- Add photo note -->
-    <div style="background:var(--green-pale);border-radius:12px;padding:20px 24px;margin-top:32px;display:flex;gap:12px;align-items:flex-start;">
-      <i class="fas fa-camera" style="color:var(--green);margin-top:2px;"></i>
-      <p style="margin:0;font-size:0.85rem;color:var(--green);">
-        <span class="lang-id"><strong>Untuk editor:</strong> Simpan foto prototipe di folder <code>assets/images/</code> dengan nama yang sesuai (misal: <code>robot-tangan.jpg</code>). Foto akan otomatis tampil menggantikan ikon emoji.</span>
-        <span class="lang-en"><strong>For editors:</strong> Save prototype photos in the <code>assets/images/</code> folder with matching names (e.g., <code>robot-tangan.jpg</code>). Photos will automatically appear replacing the emoji icons.</span>
-      </p>
-    </div>
   </div>
 </section>
 
@@ -352,6 +446,41 @@
   </div>
 </footer>
 
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-header-bar">
+      <button class="modal-close" onclick="closeModal()" aria-label="Tutup">×</button>
+    </div>
+    <div class="modal-img" id="modal-img"></div>
+    <div class="modal-body">
+      <span class="product-tag modal-tag" id="modal-tag"></span>
+      <h2 id="modal-name"></h2>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-specs">
+        <div class="modal-spec">
+          <div class="spec-label"><span class="lang-id">Tahun</span><span class="lang-en">Year</span></div>
+          <div class="spec-val" id="modal-year"></div>
+        </div>
+        <div class="modal-spec">
+          <div class="spec-label"><span class="lang-id">Status</span><span class="lang-en">Status</span></div>
+          <div class="spec-val" id="modal-status"></div>
+        </div>
+        <div class="modal-spec">
+          <div class="spec-label"><span class="lang-id">Sumber Dana</span><span class="lang-en">Funding</span></div>
+          <div class="spec-val" id="modal-fund"></div>
+        </div>
+        <div class="modal-spec">
+          <div class="spec-label"><span class="lang-id">Luaran</span><span class="lang-en">Output</span></div>
+          <div class="spec-val" id="modal-output"></div>
+        </div>
+      </div>
+      <div class="spec-label" style="margin-bottom:8px;"><span class="lang-id">Teknologi</span><span class="lang-en">Technology</span></div>
+      <div class="modal-tags-row" id="modal-tech"></div>
+    </div>
+  </div>
+</div>
+
 <button class="scroll-top" id="scroll-top"><i class="fas fa-arrow-up"></i></button>
 <script src="js/main.js"></script>
 <script>
@@ -368,6 +497,50 @@
       });
     });
   });
+
+  const isEn = () => document.body.classList.contains('en');
+
+  function openModal(card) {
+    const d = card.dataset;
+    const en = isEn();
+
+    // Image
+    const imgEl = document.getElementById('modal-img');
+    const imgSrc = d.img || '';
+    const emoji = d.emoji || '🔧';
+    imgEl.innerHTML = `<img src="${imgSrc}" alt="" onerror="this.parentElement.innerHTML='<span style=font-size:5rem>${emoji}</span>'">`;
+
+    // Tag
+    const tag = document.getElementById('modal-tag');
+    tag.textContent = en ? d.tagEn : d.tagId;
+    tag.className = `product-tag modal-tag ${d.tagClass}`;
+
+    // Name, desc
+    document.getElementById('modal-name').textContent = en ? d.nameEn : d.nameId;
+    document.getElementById('modal-desc').textContent = en ? d.descEn : d.descId;
+
+    // Specs
+    document.getElementById('modal-year').textContent = d.year || '—';
+    document.getElementById('modal-status').textContent = en ? d.statusEn : d.statusId;
+    document.getElementById('modal-fund').textContent = en ? d.fundEn : d.fundId;
+    document.getElementById('modal-output').textContent = en ? d.outputEn : d.outputId;
+
+    // Tech tags
+    const techRow = document.getElementById('modal-tech');
+    techRow.innerHTML = (d.tech || '').split('·').map(t =>
+      `<span style="font-size:0.78rem;background:var(--blue-pale);color:var(--blue);padding:4px 12px;border-radius:8px;font-weight:600;">${t.trim()}</span>`
+    ).join('');
+
+    document.getElementById('productModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('productModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
