@@ -49,6 +49,7 @@
     .section-label { font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:10px;margin-top:20px; }
     .item-list { display:flex;flex-direction:column;gap:8px;margin-bottom:24px; }
     .item-row { display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f9f9f9;border-radius:8px;border:1px solid #eee; }
+    .item-row.editing { background:#e3f2fd;border-color:#90CAF9; }
     .item-row .item-title { flex:1;font-size:0.9rem;font-weight:600;color:#333; }
     .item-row .item-num { width:24px;height:24px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#555;flex-shrink:0; }
     .btn-del { background:#FFEBEE;color:#c62828;border:none;border-radius:6px;padding:5px 12px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:background 0.2s;flex-shrink:0; }
@@ -56,25 +57,24 @@
     .btn-edit { background:#E3F2FD;color:#1565C0;border:none;border-radius:6px;padding:5px 12px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:background 0.2s;flex-shrink:0; }
     .btn-edit:hover { background:#BBDEFB; }
     .empty-note { color:#aaa;font-size:0.88rem;padding:16px;text-align:center;border:1px dashed #ddd;border-radius:8px; }
-    .edit-inline { margin-top:8px;padding:12px;background:#F8F9FA;border:1.5px solid #1565C0;border-radius:8px;display:none; }
-    .edit-inline textarea { width:100%;min-height:120px;font-family:monospace;font-size:0.82rem;padding:8px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;resize:vertical; }
-    .edit-inline-btns { display:flex;gap:8px;margin-top:8px; }
-    .btn-update { background:#1565C0;color:white;border:none;border-radius:6px;padding:6px 16px;font-size:0.82rem;font-weight:700;cursor:pointer; }
-    .btn-update:hover { background:#0d47a1; }
-    .btn-cancel-edit { background:#e0e0e0;color:#333;border:none;border-radius:6px;padding:6px 14px;font-size:0.82rem;font-weight:700;cursor:pointer; }
 
-    /* ── Add Form ── */
+    /* ── Add/Edit Form ── */
     .add-section { border-top:1px solid #e0e0e0;padding-top:20px;margin-top:8px; }
+    .edit-mode-banner { display:none;background:#FFF8E1;border:1.5px solid #FFD54F;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.88rem;font-weight:600;color:#E65100;align-items:center;gap:8px; }
+    .edit-mode-banner.visible { display:flex; }
     .form-group { margin-bottom:12px; }
     .form-group label { display:block;font-size:0.82rem;font-weight:700;color:#444;margin-bottom:4px; }
     .form-group input, .form-group textarea, .form-group select { width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:0.9rem;font-family:Inter,sans-serif;box-sizing:border-box;transition:border-color 0.2s; }
     .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none;border-color:#1565C0; }
     .form-group textarea { min-height:75px;resize:vertical; }
     .form-row { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
-    .btn-save { background:#1565C0;color:white;border:none;padding:11px 28px;border-radius:9px;font-size:0.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s;margin-top:8px; }
+    .form-btns { display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px; }
+    .btn-save { background:#1565C0;color:white;border:none;padding:11px 28px;border-radius:9px;font-size:0.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s; }
     .btn-save:hover { background:#0d47a1; }
     .btn-save:disabled { background:#90CAF9;cursor:not-allowed; }
-    .save-msg { display:inline-flex;align-items:center;gap:6px;margin-left:12px;font-size:0.88rem;font-weight:600;padding:8px 14px;border-radius:8px; }
+    .btn-cancel { background:#e0e0e0;color:#333;border:none;padding:11px 20px;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;display:none;align-items:center;gap:6px; }
+    .btn-cancel.visible { display:inline-flex; }
+    .save-msg { display:inline-flex;align-items:center;gap:6px;font-size:0.88rem;font-weight:600;padding:8px 14px;border-radius:8px; }
     .save-msg.ok { background:#e8f5e9;color:#2E7D32; }
     .save-msg.err { background:#FFEBEE;color:#c62828; }
 
@@ -97,7 +97,7 @@
     <div class="login-error" id="login-err"></div>
     <div class="login-help">
       Belum punya token? <a href="https://github.com/settings/tokens/new" target="_blank">Buat di sini</a><br>
-      <small>Setting: Fine-grained → repo <strong>kerisatah-unej.github.io</strong> → Contents: <strong>Read & Write</strong></small>
+      <small>Setting: Fine-grained → repo <strong>kerisatah-unej.github.io</strong> → Contents: <strong>Read &amp; Write</strong></small>
     </div>
   </div>
 </div>
@@ -159,7 +159,8 @@
     <div class="section-label">Konten Saat Ini</div>
     <div id="items-berita" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Berita Baru</div>
+      <div class="section-label" id="form-label-berita">Tambah Berita Baru</div>
+      <div class="edit-mode-banner" id="banner-berita"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
       <div class="form-row">
         <div class="form-group"><label>Judul (Indonesia)</label><input id="b-judul-id" placeholder="Publikasi Baru di Jurnal Scopus Q1"></div>
         <div class="form-group"><label>Judul (English)</label><input id="b-judul-en" placeholder="New Publication in Scopus Q1"></div>
@@ -185,8 +186,11 @@
         <div class="form-group"><label>Emoji</label><input id="b-emoji" value="📰"></div>
         <div class="form-group"><label>Link "Selengkapnya"</label><input id="b-link" placeholder="publications.html"></div>
       </div>
-      <button class="btn-save" onclick="saveItem('berita')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-berita"></span>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('berita')"><i class="fas fa-save"></i> <span id="btn-label-berita">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-berita" onclick="cancelEdit('berita')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-berita"></span>
+      </div>
     </div>
   </div>
 
@@ -196,7 +200,8 @@
     <div class="section-label">Konten Saat Ini</div>
     <div id="items-publikasi" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Publikasi Baru</div>
+      <div class="section-label" id="form-label-publikasi">Tambah Publikasi Baru</div>
+      <div class="edit-mode-banner" id="banner-publikasi"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
       <div class="form-group"><label>Judul Artikel</label><input id="p-judul" placeholder="Deep Learning for EMG Signal Classification..."></div>
       <div class="form-row">
         <div class="form-group"><label>Nama Jurnal</label><input id="p-jurnal" placeholder="Neural Networks · Elsevier"></div>
@@ -218,8 +223,11 @@
         <div class="form-group"><label>Nama anggota (filter, lowercase)</label><input id="p-anggota" placeholder="khairul sumardi wahyu"></div>
         <div class="form-group"><label>DOI / Link</label><input id="p-doi" placeholder="https://doi.org/..."></div>
       </div>
-      <button class="btn-save" onclick="saveItem('publikasi')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-publikasi"></span>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('publikasi')"><i class="fas fa-save"></i> <span id="btn-label-publikasi">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-publikasi" onclick="cancelEdit('publikasi')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-publikasi"></span>
+      </div>
     </div>
   </div>
 
@@ -229,7 +237,8 @@
     <div class="section-label">Konten Saat Ini</div>
     <div id="items-pengabdian" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Kegiatan Pengabdian</div>
+      <div class="section-label" id="form-label-pengabdian">Tambah Kegiatan Pengabdian</div>
+      <div class="edit-mode-banner" id="banner-pengabdian"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
       <div class="form-row">
         <div class="form-group"><label>Judul (Indonesia)</label><input id="pg-judul-id" placeholder="Pelatihan Robot Sterilisasi"></div>
         <div class="form-group"><label>Judul (English)</label><input id="pg-judul-en" placeholder="Sterilization Robot Training"></div>
@@ -252,8 +261,11 @@
         </div>
         <div class="form-group"><label>Emoji</label><input id="pg-emoji" value="🤝"></div>
       </div>
-      <button class="btn-save" onclick="saveItem('pengabdian')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-pengabdian"></span>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('pengabdian')"><i class="fas fa-save"></i> <span id="btn-label-pengabdian">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-pengabdian" onclick="cancelEdit('pengabdian')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-pengabdian"></span>
+      </div>
     </div>
   </div>
 
@@ -263,7 +275,8 @@
     <div class="section-label">Konten Saat Ini</div>
     <div id="items-produk" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Produk / Prototipe</div>
+      <div class="section-label" id="form-label-produk">Tambah Produk / Prototipe</div>
+      <div class="edit-mode-banner" id="banner-produk"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
       <div class="form-row">
         <div class="form-group"><label>Nama Produk (Indonesia)</label><input id="pr-nama-id" placeholder="Robot Tangan untuk Terapi Stroke"></div>
         <div class="form-group"><label>Nama Produk (English)</label><input id="pr-nama-en" placeholder="Stroke Therapy Hand Robot"></div>
@@ -279,8 +292,11 @@
         <div class="form-group"><label>Emoji Fallback</label><input id="pr-emoji" value="🤖"></div>
       </div>
       <div class="form-group"><label>Nama file foto (assets/images/)</label><input id="pr-foto" placeholder="robot-tangan.jpg"></div>
-      <button class="btn-save" onclick="saveItem('produk')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-produk"></span>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('produk')"><i class="fas fa-save"></i> <span id="btn-label-produk">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-produk" onclick="cancelEdit('produk')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-produk"></span>
+      </div>
     </div>
   </div>
 
@@ -290,10 +306,14 @@
     <div class="section-label">Anggota Divisi Alat Kesehatan</div>
     <div id="items-tim-kesehatan" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Anggota</div>
-      <div id="form-tim-kesehatan"><!-- shared form injected by JS --></div>
-      <button class="btn-save" onclick="saveItem('tim-kesehatan')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-tim-kesehatan"></span>
+      <div class="section-label" id="form-label-tim-kesehatan">Tambah Anggota</div>
+      <div class="edit-mode-banner" id="banner-tim-kesehatan"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
+      <div id="form-tim-kesehatan"></div>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('tim-kesehatan')"><i class="fas fa-save"></i> <span id="btn-label-tim-kesehatan">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-tim-kesehatan" onclick="cancelEdit('tim-kesehatan')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-tim-kesehatan"></span>
+      </div>
     </div>
   </div>
 
@@ -303,10 +323,14 @@
     <div class="section-label">Anggota Divisi Alat Pertanian</div>
     <div id="items-tim-pertanian" class="item-list"></div>
     <div class="add-section">
-      <div class="section-label">Tambah Anggota</div>
-      <div id="form-tim-pertanian"><!-- shared form injected by JS --></div>
-      <button class="btn-save" onclick="saveItem('tim-pertanian')"><i class="fas fa-save"></i> Simpan ke GitHub</button>
-      <span id="msg-tim-pertanian"></span>
+      <div class="section-label" id="form-label-tim-pertanian">Tambah Anggota</div>
+      <div class="edit-mode-banner" id="banner-tim-pertanian"><i class="fas fa-pen"></i> Mode Edit — perubahan akan menggantikan item yang dipilih</div>
+      <div id="form-tim-pertanian"></div>
+      <div class="form-btns">
+        <button class="btn-save" onclick="saveItem('tim-pertanian')"><i class="fas fa-save"></i> <span id="btn-label-tim-pertanian">Simpan ke GitHub</span></button>
+        <button class="btn-cancel" id="cancel-tim-pertanian" onclick="cancelEdit('tim-pertanian')"><i class="fas fa-times"></i> Batal Edit</button>
+        <span id="msg-tim-pertanian"></span>
+      </div>
     </div>
   </div>
 
@@ -330,9 +354,6 @@ const API   = 'https://api.github.com';
 const SESS  = 'keris_gh_token';
 let GH_TOKEN = '';
 
-// ══════════════════════════════════════════════
-//  SECTION CONFIG  (file, sectionName, cardSelector, titleSelector)
-// ══════════════════════════════════════════════
 const TABS = {
   'berita':        { file:'news.html',         section:'berita',        card:'.news-small-card', titleSel:'h3' },
   'publikasi':     { file:'publications.html', section:'publikasi',     card:'.pub-card',        titleSel:'h4' },
@@ -342,9 +363,16 @@ const TABS = {
   'tim-pertanian': { file:'team.html',         section:'tim-pertanian', card:'.team-card',       titleSel:'h3' },
 };
 
-// cache: {file: {content, sha}}
+const FORM_LABELS = {
+  'berita':'Tambah Berita Baru', 'publikasi':'Tambah Publikasi Baru',
+  'pengabdian':'Tambah Kegiatan Pengabdian', 'produk':'Tambah Produk / Prototipe',
+  'tim-kesehatan':'Tambah Anggota', 'tim-pertanian':'Tambah Anggota',
+};
+
 const fileCache = {};
 let activeTab = 'berita';
+// editingIndex[tabName] = index being edited, or null
+const editingIndex = {};
 
 // ══════════════════════════════════════════════
 //  AUTH
@@ -354,7 +382,6 @@ async function doLogin() {
   if (!token) return;
   const btn = document.getElementById('btn-login');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memeriksa...';
-
   try {
     const res = await fetch(`${API}/user`, {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
@@ -375,11 +402,7 @@ async function doLogin() {
   }
 }
 
-function doLogout() {
-  sessionStorage.removeItem(SESS);
-  GH_TOKEN = ''; location.reload();
-}
-
+function doLogout() { sessionStorage.removeItem(SESS); GH_TOKEN = ''; location.reload(); }
 function showLoginErr(msg) {
   const el = document.getElementById('login-err');
   el.textContent = msg; el.style.display = 'block';
@@ -396,17 +419,13 @@ async function ghGet(path) {
   if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
   return res.json();
 }
-
 async function ghPut(path, content, sha, message) {
   const res = await fetch(`${API}${path}`, {
     method: 'PUT',
     headers: { Authorization: `Bearer ${GH_TOKEN}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github+json' },
     body: JSON.stringify({ message, content: toBase64(content), sha })
   });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || `GitHub error ${res.status}`);
-  }
+  if (!res.ok) { const err = await res.json(); throw new Error(err.message || `GitHub error ${res.status}`); }
   return res.json();
 }
 
@@ -420,12 +439,10 @@ async function getFile(filename) {
   fileCache[filename] = { content, sha: data.sha };
   return fileCache[filename];
 }
-
 async function putFile(filename, newContent, message) {
   const cached = fileCache[filename];
   if (!cached) throw new Error('File belum dimuat');
   const result = await ghPut(`/repos/${REPO}/contents/${filename}`, newContent, cached.sha, message);
-  // Update cache with new sha
   fileCache[filename] = { content: newContent, sha: result.content.sha };
 }
 
@@ -438,33 +455,29 @@ function getSection(content, sectionName) {
   const si = content.indexOf(startTag);
   const ei = content.indexOf(endTag);
   if (si === -1 || ei === -1) return null;
-  return {
-    before:  content.slice(0, si + startTag.length),
-    section: content.slice(si + startTag.length, ei),
-    after:   content.slice(ei),
-  };
+  return { before: content.slice(0, si + startTag.length), section: content.slice(si + startTag.length, ei), after: content.slice(ei) };
 }
-
 function setSection(content, sectionName, newSection) {
   const parts = getSection(content, sectionName);
   if (!parts) return content;
   return parts.before + newSection + parts.after;
 }
-
 function parseItems(sectionHtml, cardSelector, titleSel) {
   const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html');
   const cards = doc.querySelectorAll(cardSelector);
   return Array.from(cards).map(card => {
-    const titleEl = card.querySelector(`.lang-id`) || card.querySelector(titleSel) || card.querySelector('h3,h4,h2');
-    const title = titleEl ? titleEl.textContent.trim().slice(0, 80) : '(item)';
-    return { title, html: card.outerHTML };
+    const titleEl = card.querySelector('.lang-id') || card.querySelector(titleSel) || card.querySelector('h3,h4,h2');
+    return { title: titleEl ? titleEl.textContent.trim().slice(0, 80) : '(item)', html: card.outerHTML };
   });
 }
-
-function deleteItemFromSection(sectionHtml, cardSelector, index) {
+function modifySection(sectionHtml, cardSelector, index, newHtml) {
   const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html');
   const cards = doc.querySelectorAll(cardSelector);
-  if (cards[index]) cards[index].remove();
+  if (newHtml === null) {
+    if (cards[index]) cards[index].remove();
+  } else {
+    if (cards[index]) cards[index].replaceWith(doc.createRange().createContextualFragment(newHtml));
+  }
   return '\n' + doc.querySelector('div').innerHTML + '\n';
 }
 
@@ -479,21 +492,16 @@ function switchTab(name, btn) {
   activeTab = name;
   loadTab(name);
 }
-
 async function loadTab(name) {
   const cfg = TABS[name];
   const statusEl = document.getElementById(`status-${name}`);
   const itemsEl  = document.getElementById(`items-${name}`);
   setStatus(statusEl, 'loading', '⏳ Memuat dari GitHub...');
   itemsEl.innerHTML = '';
-
   try {
     const { content } = await getFile(cfg.file);
     const parts = getSection(content, cfg.section);
-    if (!parts) {
-      setStatus(statusEl, 'error', '❌ Section marker tidak ditemukan di file');
-      return;
-    }
+    if (!parts) { setStatus(statusEl, 'error', '❌ Section marker tidak ditemukan di file'); return; }
     const items = parseItems(parts.section, cfg.card, cfg.titleSel);
     setStatus(statusEl, 'ok', `✅ ${items.length} item ditemukan di ${cfg.file}`);
     renderItems(itemsEl, items, name);
@@ -501,78 +509,185 @@ async function loadTab(name) {
     setStatus(statusEl, 'error', `❌ ${e.message}`);
   }
 }
-
-function setStatus(el, type, msg) {
-  el.className = `status-bar ${type}`;
-  el.innerHTML = msg;
-}
+function setStatus(el, type, msg) { el.className = `status-bar ${type}`; el.innerHTML = msg; }
 
 function renderItems(container, items, tabName) {
-  if (items.length === 0) {
-    container.innerHTML = '<div class="empty-note">Belum ada item</div>';
-    return;
-  }
+  if (items.length === 0) { container.innerHTML = '<div class="empty-note">Belum ada item</div>'; return; }
   container.innerHTML = items.map((item, i) => `
-    <div class="item-row-wrap" id="wrap-${tabName}-${i}">
-      <div class="item-row">
-        <span class="item-num">${i+1}</span>
-        <span class="item-title">${escHtml(item.title)}</span>
-        <button class="btn-edit" onclick="toggleEdit('${tabName}',${i})">
-          <i class="fas fa-pen"></i> Edit
-        </button>
-        <button class="btn-del" onclick="deleteItem('${tabName}',${i})">
-          <i class="fas fa-trash"></i> Hapus
-        </button>
-      </div>
-      <div class="edit-inline" id="edit-inline-${tabName}-${i}">
-        <textarea id="edit-ta-${tabName}-${i}">${escHtml(item.html)}</textarea>
-        <div class="edit-inline-btns">
-          <button class="btn-update" onclick="replaceItem('${tabName}',${i})">
-            <i class="fas fa-save"></i> Simpan Perubahan
-          </button>
-          <button class="btn-cancel-edit" onclick="toggleEdit('${tabName}',${i})">Batal</button>
-        </div>
-      </div>
+    <div class="item-row" id="row-${tabName}-${i}">
+      <span class="item-num">${i+1}</span>
+      <span class="item-title">${escHtml(item.title)}</span>
+      <button class="btn-edit" onclick="startEdit('${tabName}',${i})">
+        <i class="fas fa-pen"></i> Edit
+      </button>
+      <button class="btn-del" onclick="deleteItem('${tabName}',${i})">
+        <i class="fas fa-trash"></i> Hapus
+      </button>
     </div>
   `).join('');
 }
 
-function toggleEdit(tabName, index) {
-  const el = document.getElementById(`edit-inline-${tabName}-${index}`);
-  el.style.display = el.style.display === 'block' ? 'none' : 'block';
-}
+// ══════════════════════════════════════════════
+//  EDIT MODE
+// ══════════════════════════════════════════════
+async function startEdit(tabName, index) {
+  // highlight row
+  document.querySelectorAll(`[id^="row-${tabName}-"]`).forEach(r => r.classList.remove('editing'));
+  const row = document.getElementById(`row-${tabName}-${index}`);
+  if (row) row.classList.add('editing');
 
-// ══════════════════════════════════════════════
-//  EDIT / REPLACE
-// ══════════════════════════════════════════════
-async function replaceItem(tabName, index) {
-  const ta = document.getElementById(`edit-ta-${tabName}-${index}`);
-  const newHtml = ta.value;
-  if (!newHtml.trim()) { alert('Konten tidak boleh kosong'); return; }
+  // get item html
   const cfg = TABS[tabName];
-  const statusEl = document.getElementById(`status-${tabName}`);
-  setStatus(statusEl, 'loading', '⏳ Menyimpan perubahan...');
-  try {
-    const { content } = await getFile(cfg.file);
-    const parts = getSection(content, cfg.section);
-    const newSection = replaceItemInSection(parts.section, cfg.card, index, newHtml);
-    const newContent = setSection(content, cfg.section, newSection);
-    await putFile(cfg.file, newContent, `Edit item ${index+1} di ${cfg.section} via editor`);
-    delete fileCache[cfg.file];
-    await loadTab(tabName);
-  } catch(e) {
-    setStatus(statusEl, 'error', `❌ ${e.message}`);
+  const { content } = await getFile(cfg.file);
+  const parts = getSection(content, cfg.section);
+  const items = parseItems(parts.section, cfg.card, cfg.titleSel);
+  const itemHtml = items[index]?.html || '';
+
+  // fill form fields from html
+  fillFormFromHtml(tabName, itemHtml);
+
+  // set edit mode state
+  editingIndex[tabName] = index;
+  document.getElementById(`form-label-${tabName}`).textContent = `✏️ Edit Item #${index + 1}`;
+  document.getElementById(`banner-${tabName}`).classList.add('visible');
+  document.getElementById(`btn-label-${tabName}`).textContent = 'Simpan Perubahan';
+  document.getElementById(`cancel-${tabName}`).classList.add('visible');
+
+  // scroll to form
+  document.querySelector(`#panel-${tabName} .add-section`).scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function cancelEdit(tabName) {
+  editingIndex[tabName] = null;
+  document.querySelectorAll(`[id^="row-${tabName}-"]`).forEach(r => r.classList.remove('editing'));
+  document.getElementById(`form-label-${tabName}`).textContent = FORM_LABELS[tabName];
+  document.getElementById(`banner-${tabName}`).classList.remove('visible');
+  document.getElementById(`btn-label-${tabName}`).textContent = 'Simpan ke GitHub';
+  document.getElementById(`cancel-${tabName}`).classList.remove('visible');
+  clearForm(tabName);
+}
+
+// ══════════════════════════════════════════════
+//  PARSE HTML → FORM FIELDS
+// ══════════════════════════════════════════════
+function txt(el, sel) { const f = el?.querySelector(sel); return f ? f.textContent.trim() : ''; }
+function attr(el, sel, a) { const f = el?.querySelector(sel); return f ? (f.getAttribute(a)||'').trim() : ''; }
+
+function fillFormFromHtml(tabName, html) {
+  const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+  const card = doc.querySelector('div > *');
+  if (!card) return;
+
+  if (tabName === 'berita') {
+    setVal('b-judul-id', txt(card, 'h3 .lang-id') || txt(card, 'h3'));
+    setVal('b-judul-en', txt(card, 'h3 .lang-en'));
+    setVal('b-desc-id',  txt(card, 'p .lang-id') || txt(card, 'p'));
+    setVal('b-desc-en',  txt(card, 'p .lang-en'));
+    setVal('b-tgl',      txt(card, '.meta').replace(/[^ -~]/g,'').trim() || txt(card, '.meta'));
+    setVal('b-link',     attr(card, 'a.read-more', 'href') || attr(card, 'a', 'href'));
+    const catEl = card.querySelector('.cat');
+    if (catEl) setSelectByText('b-cat', catEl.textContent.trim());
+    const imgEl = card.querySelector('.news-small-img');
+    if (imgEl) setVal('b-emoji', imgEl.textContent.trim());
+  }
+
+  else if (tabName === 'publikasi') {
+    const titleEl = card.querySelector('h4 a') || card.querySelector('h4');
+    setVal('p-judul', titleEl ? titleEl.textContent.trim() : '');
+    setVal('p-doi', attr(card, 'h4 a', 'href'));
+    const journal = txt(card, '.pub-journal');
+    const jParts = journal.split(' · ');
+    setVal('p-jurnal', jParts.slice(0, jParts.length > 2 ? -2 : -1).join(' · ') || jParts[0] || '');
+    setVal('p-penulis', jParts[jParts.length > 2 ? jParts.length - 2 : 1] || '');
+    setVal('p-tahun', txt(card, '.pub-year'));
+    // extract sitasi from journal text (e.g. "· 5 sitasi")
+    const sitasiMatch = journal.match(/(\d+)\s*sitasi/);
+    setVal('p-sitasi', sitasiMatch ? sitasiMatch[1] : '');
+    // indeks & q from badge classes
+    const badges = card.querySelectorAll('.pub-badge');
+    badges.forEach(b => {
+      const cls = b.className;
+      if (cls.includes('badge-scopus')) setSelect('p-indeks', 'scopus');
+      else if (cls.includes('badge-wos')) setSelect('p-indeks', 'wos');
+      else if (cls.includes('badge-sinta')) setSelect('p-indeks', 'sinta');
+      else if (cls.includes('badge-book')) setSelect('p-indeks', 'book');
+      if (cls.includes('badge-q1')) setSelect('p-q', 'q1');
+      else if (cls.includes('badge-q2')) setSelect('p-q', 'q2');
+      else if (cls.includes('badge-q3')) setSelect('p-q', 'q3');
+    });
+    const tags = attr(card, '[data-tags]', 'data-tags') || '';
+    // anggota = words that are not indeks/q/year
+    const skip = ['scopus','wos','sinta','book','q1','q2','q3'];
+    const anggota = tags.split(' ').filter(t => t && !skip.includes(t) && !/^\d{4}$/.test(t)).join(' ');
+    setVal('p-anggota', anggota);
+  }
+
+  else if (tabName === 'pengabdian') {
+    setVal('pg-judul-id', txt(card, 'h3 .lang-id') || txt(card, 'h3'));
+    setVal('pg-judul-en', txt(card, 'h3 .lang-en'));
+    setVal('pg-desc-id',  txt(card, 'p .lang-id') || txt(card, 'p'));
+    setVal('pg-desc-en',  txt(card, 'p .lang-en'));
+    const metaSpans = card.querySelectorAll('.act-card-meta span');
+    setVal('pg-lokasi', metaSpans[0] ? metaSpans[0].textContent.trim() : '');
+    setVal('pg-tahun',  metaSpans[1] ? metaSpans[1].textContent.trim() : '');
+    const imgEl = card.querySelector('.act-img-wrap');
+    if (imgEl) setVal('pg-emoji', imgEl.textContent.trim());
+    const catEl = card.querySelector('.act-category');
+    if (catEl) {
+      const cls = catEl.className;
+      if (cls.includes('cat-health')) setSelect('pg-cat', 'cat-health');
+      else if (cls.includes('cat-agri')) setSelect('pg-cat', 'cat-agri');
+      else if (cls.includes('cat-tech')) setSelect('pg-cat', 'cat-tech');
+    }
+  }
+
+  else if (tabName === 'produk') {
+    setVal('pr-nama-id', txt(card, 'h3 .lang-id') || txt(card, 'h3'));
+    setVal('pr-nama-en', txt(card, 'h3 .lang-en'));
+    setVal('pr-desc-id', txt(card, 'p .lang-id') || txt(card, 'p'));
+    setVal('pr-desc-en', txt(card, 'p .lang-en'));
+    const cat = attr(card, '[data-cat]', 'data-cat') || attr(card, '.product-card', 'data-cat');
+    if (cat) setSelect('pr-cat', cat);
+    const imgEl = card.querySelector('img');
+    if (imgEl) {
+      const src = imgEl.getAttribute('src') || '';
+      setVal('pr-foto', src.replace('assets/images/', ''));
+    }
+  }
+
+  else if (tabName === 'tim-kesehatan' || tabName === 'tim-pertanian') {
+    const sfx = tabName === 'tim-kesehatan' ? 'tk' : 'tp';
+    const namaLengkap = txt(card, 'h3');
+    // split gelar prefix (ends at first name word starting with uppercase not followed by dot)
+    // simple heuristic: take everything before the last 1-2 "name" words
+    const gelarMatch = namaLengkap.match(/^((?:[A-Z][a-z]*\.\s*)*(?:Ir\.|Prof\.|Dr\.|S\.T\.|M\.T\.|Ph\.D[,.]?|IPU\.|ASEAN\s+Eng\.)\s*)(.+)$/);
+    let gelar = '', nama = namaLengkap;
+    if (gelarMatch) { gelar = gelarMatch[1].trim(); nama = gelarMatch[2].trim(); }
+    setVal(`${sfx}-nama`, nama);
+    setVal(`${sfx}-gelar`, gelar);
+    setVal(`${sfx}-prodi`, txt(card, '.division'));
+    // keahlian: p tags that are not role/division-related
+    const pTags = Array.from(card.querySelectorAll('.team-card-top > p, .team-card-top p[style]'));
+    setVal(`${sfx}-keahlian`, pTags.map(p => p.textContent.trim()).filter(Boolean).join(', '));
+    const imgEl = card.querySelector('img.team-avatar');
+    if (imgEl) setVal(`${sfx}-foto`, (imgEl.getAttribute('src')||'').replace('assets/images/',''));
+    const sintaLink = card.querySelector('a[href*="sinta"]');
+    if (sintaLink) {
+      const href = sintaLink.getAttribute('href') || '';
+      const m = href.match(/\/(\d+)\s*$/);
+      if (m) setVal(`${sfx}-sinta`, m[1]);
+    }
+    const webLink = card.querySelector('a[href*="scholar"], a[href*="http"]:not([href*="sinta"])');
+    if (webLink) setVal(`${sfx}-web`, webLink.getAttribute('href') || '');
   }
 }
 
-function replaceItemInSection(sectionHtml, cardSelector, index, newHtml) {
-  const doc = new DOMParser().parseFromString(`<div>${sectionHtml}</div>`, 'text/html');
-  const cards = doc.querySelectorAll(cardSelector);
-  if (cards[index]) {
-    const tmp = doc.createRange().createContextualFragment(newHtml);
-    cards[index].replaceWith(tmp);
-  }
-  return '\n' + doc.querySelector('div').innerHTML + '\n';
+function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val || ''; }
+function setSelect(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+function setSelectByText(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  for (const opt of el.options) { if (opt.value === text || opt.text === text) { el.value = opt.value; break; } }
 }
 
 // ══════════════════════════════════════════════
@@ -583,14 +698,14 @@ async function deleteItem(tabName, index) {
   const cfg = TABS[tabName];
   const statusEl = document.getElementById(`status-${tabName}`);
   setStatus(statusEl, 'loading', '⏳ Menghapus...');
-
   try {
     const { content } = await getFile(cfg.file);
     const parts = getSection(content, cfg.section);
-    const newSection = deleteItemFromSection(parts.section, cfg.card, index);
+    const newSection = modifySection(parts.section, cfg.card, index, null);
     const newContent = setSection(content, cfg.section, newSection);
     await putFile(cfg.file, newContent, `Hapus item ${index+1} dari ${cfg.section} via editor`);
-    delete fileCache[cfg.file]; // invalidate cache
+    delete fileCache[cfg.file];
+    if (editingIndex[tabName] === index) cancelEdit(tabName);
     await loadTab(tabName);
   } catch(e) {
     setStatus(statusEl, 'error', `❌ ${e.message}`);
@@ -598,7 +713,7 @@ async function deleteItem(tabName, index) {
 }
 
 // ══════════════════════════════════════════════
-//  SAVE (ADD NEW ITEM)
+//  SAVE (ADD NEW or REPLACE EXISTING)
 // ══════════════════════════════════════════════
 async function saveItem(tabName) {
   const html = generateHtml(tabName);
@@ -606,19 +721,27 @@ async function saveItem(tabName) {
   const cfg = TABS[tabName];
   const msgEl = document.getElementById(`msg-${tabName}`);
   const btnEl = document.querySelector(`#panel-${tabName} .btn-save`);
+  const isEdit = editingIndex[tabName] != null;
   btnEl.disabled = true;
   showMsg(msgEl, '', '');
-
   try {
     const { content } = await getFile(cfg.file);
     const parts = getSection(content, cfg.section);
     if (!parts) throw new Error('Section marker tidak ditemukan');
-    const newSection = parts.section + '\n' + html + '\n';
+    let newSection;
+    if (isEdit) {
+      newSection = modifySection(parts.section, cfg.card, editingIndex[tabName], html);
+    } else {
+      newSection = parts.section + '\n' + html + '\n';
+    }
     const newContent = setSection(content, cfg.section, newSection);
-    await putFile(cfg.file, newContent, `Tambah item baru ke ${cfg.section} via editor`);
+    const msg = isEdit
+      ? `Edit item ${editingIndex[tabName]+1} di ${cfg.section} via editor`
+      : `Tambah item baru ke ${cfg.section} via editor`;
+    await putFile(cfg.file, newContent, msg);
     delete fileCache[cfg.file];
-    showMsg(msgEl, 'ok', '✅ Berhasil disimpan ke GitHub!');
-    clearForm(tabName);
+    showMsg(msgEl, 'ok', isEdit ? '✅ Berhasil diperbarui!' : '✅ Berhasil disimpan!');
+    cancelEdit(tabName);
     await loadTab(tabName);
   } catch(e) {
     showMsg(msgEl, 'err', `❌ ${e.message}`);
@@ -695,7 +818,7 @@ function genPengabdian() {
   if (!judulId) { alert('Isi judul kegiatan dulu'); return null; }
   const judulEn = v('pg-judul-en'), descId = v('pg-desc-id'), descEn = v('pg-desc-en');
   const lokasi = v('pg-lokasi'), tahun = v('pg-tahun'), cat = v('pg-cat'), emoji = v('pg-emoji') || '🤝';
-  const catLabel = { 'cat-health':'🏥 Kesehatan', 'cat-agri':'🌾 Pertanian', 'cat-tech':'💡 Teknologi' };
+  const catLabel   = { 'cat-health':'🏥 Kesehatan', 'cat-agri':'🌾 Pertanian', 'cat-tech':'💡 Teknologi' };
   const catLabelEn = { 'cat-health':'🏥 Health', 'cat-agri':'🌾 Agriculture', 'cat-tech':'💡 Technology' };
   return `
       <div class="act-small-card">
@@ -704,14 +827,8 @@ function genPengabdian() {
           <span class="act-category ${cat}" style="font-size:0.72rem;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px;">
             <span class="lang-id">${catLabel[cat]||''}</span><span class="lang-en">${catLabelEn[cat]||''}</span>
           </span>
-          <h3>
-            <span class="lang-id">${e(judulId)}</span>
-            <span class="lang-en">${e(judulEn)}</span>
-          </h3>
-          <p>
-            <span class="lang-id">${e(descId)}</span>
-            <span class="lang-en">${e(descEn)}</span>
-          </p>
+          <h3><span class="lang-id">${e(judulId)}</span><span class="lang-en">${e(judulEn)}</span></h3>
+          <p><span class="lang-id">${e(descId)}</span><span class="lang-en">${e(descEn)}</span></p>
           <div class="act-card-meta">
             <span><i class="fas fa-map-marker-alt"></i> ${e(lokasi)}</span>
             <span><i class="fas fa-calendar"></i> ${e(tahun)}</span>
@@ -726,8 +843,8 @@ function genProduk() {
   const namaEn = v('pr-nama-en'), descId = v('pr-desc-id'), descEn = v('pr-desc-en');
   const cat = v('pr-cat'), emoji = v('pr-emoji') || '🤖', foto = v('pr-foto');
   const tagCls = { health:'pt-health', agri:'pt-agri', covid:'pt-covid' };
-  const tagId = { health:'🏥 Kesehatan', agri:'🌾 Pertanian', covid:'🦠 COVID-19' };
-  const tagEn = { health:'🏥 Health', agri:'🌾 Agriculture', covid:'🦠 COVID-19' };
+  const tagId  = { health:'🏥 Kesehatan', agri:'🌾 Pertanian', covid:'🦠 COVID-19' };
+  const tagEn  = { health:'🏥 Health', agri:'🌾 Agriculture', covid:'🦠 COVID-19' };
   return `
       <div class="product-card" data-cat="${cat}">
         <div class="product-img">
@@ -756,7 +873,7 @@ function genTim(tabName) {
   const keahlianTags = keahlian.split(',').map(k => k.trim()).filter(Boolean)
     .map(k => `<p style="font-size:0.8rem;color:var(--gray);margin-top:8px;">${e(k)}</p>`).join('');
   const sintaLink = sinta ? `<a href="https://sinta.kemdiktisaintek.go.id/authors/profile/${sinta}" target="_blank" class="social-link" title="SINTA"><i class="fas fa-graduation-cap"></i></a>` : '';
-  const webLink  = web ? `<a href="${e(web)}" target="_blank" class="social-link" title="Website"><i class="fas fa-globe"></i></a>` : '';
+  const webLink   = web ? `<a href="${e(web)}" target="_blank" class="social-link" title="Website"><i class="fas fa-globe"></i></a>` : '';
   const colorClass = tabName === 'tim-kesehatan' ? '' : ' green';
   return `
       <div class="team-card">
@@ -781,7 +898,7 @@ function injectTimForms() {
     document.getElementById(`form-${tab}`).innerHTML = `
       <div class="form-row">
         <div class="form-group"><label>Nama (tanpa gelar)</label><input id="${sfx}-nama" placeholder="Khairul Anam"></div>
-        <div class="form-group"><label>Gelar (depan & belakang)</label><input id="${sfx}-gelar" placeholder="Prof. Ir. ... S.T., M.T., Ph.D"></div>
+        <div class="form-group"><label>Gelar (depan &amp; belakang)</label><input id="${sfx}-gelar" placeholder="Prof. Ir. ... S.T., M.T., Ph.D"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>Program Studi / Departemen</label><input id="${sfx}-prodi" placeholder="Teknik Elektro · Universitas Jember"></div>
@@ -804,6 +921,11 @@ function clearForm(tabName) {
   panel.querySelectorAll('input:not([type=hidden]), textarea').forEach(el => {
     if (!['b-emoji','pg-emoji','pr-emoji'].includes(el.id)) el.value = '';
   });
+  // restore default emoji
+  ['b-emoji','pg-emoji','pr-emoji'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = id === 'b-emoji' ? '📰' : id === 'pg-emoji' ? '🤝' : '🤖';
+  });
 }
 
 // ══════════════════════════════════════════════
@@ -825,14 +947,11 @@ function fromBase64(b64) {
 }
 
 // ══════════════════════════════════════════════
-//  AUTO-LOGIN (jika token ada di session)
+//  AUTO-LOGIN
 // ══════════════════════════════════════════════
 (function() {
   const saved = sessionStorage.getItem(SESS);
-  if (saved) {
-    document.getElementById('token-input').value = saved;
-    doLogin();
-  }
+  if (saved) { document.getElementById('token-input').value = saved; doLogin(); }
 })();
 </script>
 </body>
