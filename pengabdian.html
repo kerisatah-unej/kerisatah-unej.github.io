@@ -719,6 +719,23 @@ function closeActModal(e) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeActModal({}); });
+
+// Auto-sort kartu pengabdian: tahun terbaru di atas
+(function sortPengabdian() {
+  const BULAN = {januari:1,februari:2,maret:3,april:4,mei:5,juni:6,juli:7,agustus:8,september:9,oktober:10,november:11,desember:12};
+  function parseDate(str) {
+    if (!str) return 0;
+    const parts = str.trim().toLowerCase().split(/\s+/);
+    const year = parseInt(parts[parts.length - 1]) || 0;
+    const month = parts.length > 1 ? (BULAN[parts[0]] || 0) : 0;
+    return year * 100 + month;
+  }
+  document.querySelectorAll('.act-grid').forEach(grid => {
+    const cards = Array.from(grid.querySelectorAll('.act-small-card'));
+    cards.sort((a, b) => parseDate(b.dataset.tahun) - parseDate(a.dataset.tahun));
+    cards.forEach(c => grid.appendChild(c));
+  });
+})();
 </script>
 </body>
 </html>

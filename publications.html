@@ -329,6 +329,19 @@
   });
 
   searchInput.addEventListener('input', applyFilters);
+
+  // Auto-sort publikasi: tahun terbaru di atas
+  (function sortPublikasi() {
+    document.querySelectorAll('.pub-grid').forEach(grid => {
+      const cards = Array.from(grid.querySelectorAll('.pub-card'));
+      cards.sort((a, b) => {
+        const ya = parseInt(a.querySelector('.pub-year')?.textContent) || 0;
+        const yb = parseInt(b.querySelector('.pub-year')?.textContent) || 0;
+        return yb - ya;
+      });
+      cards.forEach(c => grid.appendChild(c));
+    });
+  })();
 </script>
 </body>
 </html>
